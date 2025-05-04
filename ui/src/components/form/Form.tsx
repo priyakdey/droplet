@@ -7,6 +7,8 @@ import {
   FormMessage
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { useAuth } from "@/hooks/useAuth.ts";
+import { signup } from "@/services/authService.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,30 +38,12 @@ export function SignupForm({ handleLoginClick }: SignupFormProps) {
     }
   });
 
+  const { login } = useAuth();
+
   function onSubmit(values: z.infer<typeof signupFormSchema>) {
-    const handleSignup = async () => {
-      const response = await fetch("http://localhost:8080/v1/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(values)
-      });
-
-      if (response.status !== 201) {
-        throw new Error(response.statusText);
-      }
-
-      return await response.json();
-    };
-
-    handleSignup()
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    signup(values)
+      .then(data => login(data.token))
+      .catch(err => console.error(err));
   }
 
   return (
