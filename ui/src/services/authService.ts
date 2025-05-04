@@ -1,5 +1,5 @@
 import { API_V1_SIGNUP } from "@/common/constant";
-import { SignupRequest, SignupResponse } from "@/types/auth.ts";
+import { ErrorResponse, SignupRequest, SignupResponse } from "@/types/auth.ts";
 
 export async function signup(signupRequest: SignupRequest): Promise<SignupResponse> {
   const body = JSON.stringify(signupRequest);
@@ -15,7 +15,8 @@ export async function signup(signupRequest: SignupRequest): Promise<SignupRespon
   });
 
   if (response.status !== 201) {
-    throw new Error(`Signup failed: ${response.statusText}`);
+    const body: ErrorResponse = await response.json();
+    throw new Error(`Signup failed: ${body.message}`);
   }
 
   return await response.json();

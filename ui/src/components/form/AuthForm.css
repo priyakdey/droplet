@@ -62,3 +62,8 @@ form {
 .submit-button:hover {
   background-color: #5A28C7;
 }
+
+.form-bottom-text {
+  font-size: 14px;
+  font-weight: 200;
+}

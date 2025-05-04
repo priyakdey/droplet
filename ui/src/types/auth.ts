@@ -9,3 +9,7 @@ export interface SignupResponse {
   name: string;
   token: string;
 }
+
+export interface ErrorResponse {
+  message: string;
+}

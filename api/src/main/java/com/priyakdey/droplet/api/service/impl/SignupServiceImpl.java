@@ -1,6 +1,7 @@
 package com.priyakdey.droplet.api.service.impl;
 
 import com.priyakdey.droplet.api.entity.Account;
+import com.priyakdey.droplet.api.exception.EmailExistsException;
 import com.priyakdey.droplet.api.repository.AccountRepository;
 import com.priyakdey.droplet.api.service.SignupService;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class SignupServiceImpl implements SignupService {
 
     @Override
     public Long signup(String name, String email, String password) {
+        if (accountRepository.existsByEmail(email)) {
+            throw new EmailExistsException("An account with same email already exists");
+        }
         Account account = new Account(name, email, password);
         account = accountRepository.save(account);
         return account.getId();

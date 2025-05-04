@@ -1,4 +1,5 @@
-import { LoginForm, SignupForm } from "@/components/form/Form";
+import { LoginForm } from "@/components/form/LoginForm.tsx";
+import SignupForm from "@/components/form/SignupForm.tsx";
 import { useState } from "react";
 import "./Main.css";
 

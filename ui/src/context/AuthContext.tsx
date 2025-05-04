@@ -16,10 +16,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [ token, setToken ] = useState<string | null>(null);
 
   const login = (token: string) => {
-    console.log(token);
+    localStorage.setItem("token", token);
     setToken(token);
   };
-  const logout = () => setToken(null);
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+  };
 
 
   const isLoggedIn = !!token;
