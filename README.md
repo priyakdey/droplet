@@ -1,6 +1,8 @@
-# Droplet
+<div align="center">
+  <img src="./ui/src/assets/droplet.svg" alt="Droplet image" width="150" />
+</div>
 
-![Droplet](./ui/src/assets/droplet.svg)
+---
 
 **Droplet** is a minimal, secure, and modern file-sharing application built as a full-stack educational project.
 
