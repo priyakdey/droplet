@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createContext, useState } from "react";
 
-interface AuthContext {
+interface AuthContextType {
   token: string | null;
   isLoggedIn: boolean;
   login: (token: string) => void;
@@ -9,7 +9,7 @@ interface AuthContext {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = createContext<AuthContext | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

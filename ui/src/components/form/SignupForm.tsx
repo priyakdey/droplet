@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useAuth } from "@/hooks/useAuth.ts";
+import { useProfile } from "@/hooks/useProfile.ts";
 import { signup } from "@/services/authService.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -32,6 +33,7 @@ interface SignupFormProps {
 function SignupForm({ handleLoginClick }: SignupFormProps) {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { setProfile } = useProfile();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -46,6 +48,7 @@ function SignupForm({ handleLoginClick }: SignupFormProps) {
     signup(values)
       .then(data => {
         login(data.token);
+        setProfile({ name: data.name });
         navigate("/dashboard");
       })
       .catch(err => {

@@ -1,12 +1,22 @@
 import { LoginForm } from "@/components/form/LoginForm.tsx";
 import SignupForm from "@/components/form/SignupForm.tsx";
-import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth.ts";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Main.css";
 
 function Main() {
-
   const [ isLogin, setIsLogin ] = useState<boolean>(false);
   const [ isSignup, setIsSignup ] = useState<boolean>(true);
+
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [ isLoggedIn, navigate ]);
 
   const handleLoginClick = () => {
     setIsLogin(true);
