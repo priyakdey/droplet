@@ -1,0 +1,6 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Droplet Icon -->
+    <path d="M30 10 C35 20, 35 30, 30 40 C25 30, 25 20, 30 10 Z" fill="#6D33E8"/>
+    <!-- Droplet Text -->
+    <text x="50" y="35" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#FFFFFF">Droplet</text>
+</svg>

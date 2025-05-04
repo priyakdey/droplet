@@ -1,0 +1,18 @@
+.footer {
+  margin-top: auto;
+  height: var(--footer-container-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.footer a {
+  color: var(--sidebar-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+/* .footer a:hover { */
+/*   color: var(--primary); */
+/* } */
