@@ -37,7 +37,29 @@ export function SignupForm({ handleLoginClick }: SignupFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof signupFormSchema>) {
-    console.log("Signup", values);
+    const handleSignup = async () => {
+      const response = await fetch("http://localhost:8080/v1/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(values)
+      });
+
+      if (response.status !== 201) {
+        throw new Error(response.statusText);
+      }
+
+      return await response.json();
+    };
+
+    handleSignup()
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
