@@ -52,11 +52,8 @@ function SignupForm({ handleLoginClick }: SignupFormProps) {
         navigate("/dashboard");
       })
       .catch(err => {
-        console.log(err);
-        return toast.error("An error has occurred", {
-          description: err.message,
-          duration: 5000
-        });
+        console.error(err);
+        return toast.error(err.message, { duration: 5000 });
       });
   }
 
