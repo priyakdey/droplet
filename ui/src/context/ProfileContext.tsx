@@ -2,6 +2,7 @@ import * as React from "react";
 import { createContext, useState } from "react";
 
 interface Profile {
+  id: number;
   name: string;
 }
 

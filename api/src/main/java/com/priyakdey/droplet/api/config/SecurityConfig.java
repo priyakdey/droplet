@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)      // TODO: enable CSRF protection
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(POST, "/v1/login").permitAll()
                         .requestMatchers(POST, "/v1/signup").permitAll()
                         .anyRequest().authenticated()
                 )

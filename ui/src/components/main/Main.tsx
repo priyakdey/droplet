@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import "./Main.css";
 
 function Main() {
-  const [ isLogin, setIsLogin ] = useState<boolean>(false);
-  const [ isSignup, setIsSignup ] = useState<boolean>(true);
+  const [ isLogin, setIsLogin ] = useState<boolean>(true);
+  const [ isSignup, setIsSignup ] = useState<boolean>(false);
 
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();

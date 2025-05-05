@@ -7,8 +7,13 @@ import {
   FormMessage
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { useAuth } from "@/hooks/useAuth.ts";
+import { useProfile } from "@/hooks/useProfile.ts";
+import { authenticate } from "@/services/authService.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
 import "./AuthForm.css";
 
@@ -22,6 +27,10 @@ interface LoginFromProps {
 }
 
 export function LoginForm({ handleSignupClick }: LoginFromProps) {
+  const { login } = useAuth();
+  const { setProfile } = useProfile();
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -31,7 +40,16 @@ export function LoginForm({ handleSignupClick }: LoginFromProps) {
   });
 
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log("Login", values);
+    authenticate(values)
+      .then(data => {
+        login(data.token);
+        setProfile({ id: data.id, name: data.name });
+        navigate("/dashboard");
+      })
+      .catch(err => {
+        console.error(err);
+        return toast.error(err.message, { duration: 5000 });
+      });
   }
 
   return (

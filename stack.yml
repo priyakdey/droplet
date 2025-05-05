@@ -1,9 +1,9 @@
-version: '3.9'
+version: "3.9"
 
 services:
   db:
     image: postgres:17.4
-    container_name: droplet-db
+    container_name: droplet.db.postgres
     restart: always
     shm_size: 128mb
     ports:
@@ -13,7 +13,21 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - droplet_pgdata:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  mongodb:
+    image: mongo:8.0
+    container_name: droplet.db.mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - droplet_mongodata:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
 volumes:
   droplet_pgdata:
+  droplet_mongodata:

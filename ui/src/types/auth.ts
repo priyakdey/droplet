@@ -13,3 +13,14 @@ export interface SignupResponse {
 export interface ErrorResponse {
   message: string;
 }
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  id: number;
+  name: string;
+  token: string;
+}

@@ -48,7 +48,7 @@ function SignupForm({ handleLoginClick }: SignupFormProps) {
     signup(values)
       .then(data => {
         login(data.token);
-        setProfile({ name: data.name });
+        setProfile({ id: data.id, name: data.name });
         navigate("/dashboard");
       })
       .catch(err => {
