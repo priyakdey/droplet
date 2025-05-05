@@ -44,7 +44,7 @@ export function LoginForm({ handleSignupClick }: LoginFromProps) {
       .then(data => {
         login(data.token);
         setProfile({ id: data.id, name: data.name });
-        navigate("/dashboard");
+        navigate("/home");
       })
       .catch(err => {
         console.error(err);

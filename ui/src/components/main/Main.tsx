@@ -14,7 +14,7 @@ function Main() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/dashboard", { replace: true });
+      navigate("/home", { replace: true });
     }
   }, [ isLoggedIn, navigate ]);
 

@@ -1,6 +1,6 @@
 db = db.getSiblingDB("droplet");
 
-db.createCollection("folders");
+db.createCollection("directories");
 db.folders.createIndex({ ownerId: 1 });
 db.folders.createIndex({ parentId: 1 });
 

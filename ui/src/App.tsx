@@ -1,5 +1,5 @@
 import Footer from "@/components/footer/Footer.tsx";
-import Dashboard from "@/page/Dashboard.tsx";
+import HomePage from "@/page/HomePage.tsx";
 import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
@@ -16,9 +16,9 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/dashboard" element={
+        <Route path="/home" element={
           <ProtectedRoute>
-            <Dashboard />
+            <HomePage />
           </ProtectedRoute>
         } />
       </Routes>

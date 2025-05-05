@@ -7,8 +7,8 @@ import java.io.Serial;
 /**
  * @author Priyak Dey
  */
-@Document(collection = "folders")
-public class Folder extends Inode {
+@Document(collection = "directories")
+public class Directory extends Inode {
     @Serial
     private static final long serialVersionUID = 5632357020507203193L;
 
