@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Set<String> WHITELIST = Set.of("/v1login", "/v1/signup");
+    private static final Set<String> WHITELIST = Set.of("/v1/login", "/v1/signup");
 
 
     private final JwtService jwtService;

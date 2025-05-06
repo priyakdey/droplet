@@ -24,7 +24,7 @@ public class JwtServiceHS256Impl implements JwtService {
     // TODO: These would be common across algorithms, maybe bind values in a struct, and then inject in service
     private static final String SECRET = "secret";
     private static final String ISSUER = "droplet-dev";
-    private static final long timeDelta = 5 * 60;
+    private static final long timeDelta = 60 * 60;
     private static final long leeway = 10;
 
     static {
