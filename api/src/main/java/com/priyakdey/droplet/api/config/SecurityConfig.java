@@ -1,5 +1,7 @@
 package com.priyakdey.droplet.api.config;
 
+import com.priyakdey.droplet.api.filter.JwtAuthenticationFilter;
+import com.priyakdey.droplet.api.service.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.POST;
 
@@ -21,7 +24,8 @@ import static org.springframework.http.HttpMethod.POST;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http, JwtAuthenticationFilter filter)
+            throws Exception {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)      // TODO: enable CSRF protection
@@ -30,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/v1/signup").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
@@ -43,6 +48,11 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2B, 10);
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtService jwtService) {
+        return new JwtAuthenticationFilter(jwtService);
     }
 
 }
