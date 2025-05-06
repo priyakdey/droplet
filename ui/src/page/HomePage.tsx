@@ -1,13 +1,18 @@
 import Footer from "@/components/footer/Footer.tsx";
 import Header from "@/components/header/Header.tsx";
+import Layout from "@/components/layout/Layout.tsx";
 import "./HomePage.css";
+
 
 function HomePage() {
   return (
     <div className="page-container">
       <Header />
       <main className="main-content">
-        HomePage
+        <aside>
+          <Layout />
+        </aside>
+        Home Page Content
       </main>
       <Footer />
     </div>

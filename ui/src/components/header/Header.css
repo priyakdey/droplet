@@ -3,5 +3,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 50px;
+  padding-left: 70px;
+  padding-right: 200px;
+  padding-top: 50px;
+}
+
+.droplet-logo {
+  padding-left: 200px;
 }

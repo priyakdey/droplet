@@ -1,18 +1,18 @@
 import AppSidebar from "@/components/sidebar/AppSidebar.tsx";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.tsx";
+import { SidebarProvider } from "@/components/ui/sidebar.tsx";
+import * as React from "react";
 import { Outlet } from "react-router-dom";
+import "./Layout.css";
 
-function Layout() {
+function Layout({ children }: { children?: React.ReactNode | null }) {
   return (
     <SidebarProvider>
-      <div className="flex flex-col h-screen w-screen">
-        <div className="flex flex-1">
-          <AppSidebar />
-          <main className="flex-1 overflow-y-auto bg-background p-4">
-            <SidebarTrigger />
-            <Outlet />
-          </main>
-        </div>
+      <div className="page-container">
+        <AppSidebar />
+        <main className="main-content">
+          {children}
+          <Outlet />
+        </main>
       </div>
     </SidebarProvider>
   );
