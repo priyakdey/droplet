@@ -5,6 +5,9 @@
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
+  position: sticky;
+  bottom: 0;
+   z-index: 10;
 }
 
 .footer a {

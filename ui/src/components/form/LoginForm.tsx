@@ -19,7 +19,7 @@ import "./AuthForm.css";
 
 const loginFormSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(0, "Cannot be empty")
+  password: z.string().min(1, "Password cannot be empty")
 });
 
 interface LoginFromProps {
@@ -65,6 +65,7 @@ export function LoginForm({ handleSignupClick }: LoginFromProps) {
                 <FormControl>
                   <Input placeholder="Email" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}>
           </FormField>

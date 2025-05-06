@@ -5,7 +5,7 @@
   justify-content: center;
   gap: 24px;
   height: 70vh;
-  width: 400px;
+  width: 450px;
   padding: 2rem;
   border: 1px solid #2A2A2A;
   border-radius: var(--radius);
@@ -50,7 +50,7 @@ form {
 .submit-button {
   width: 100%;
   padding: 0.75rem;
-  background-color: var(--primary, #6D33E8);
+  background-color: var(--secondary);
   color: white;
   font-weight: 600;
   border-radius: 0.5rem;

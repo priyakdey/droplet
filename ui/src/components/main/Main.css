@@ -1,7 +1,0 @@
-.main {
-  height: calc(100vh - var(--header-container-height) - var(--footer-container-height));
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
