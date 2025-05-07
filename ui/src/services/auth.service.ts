@@ -5,7 +5,7 @@ import {
   LoginResponse,
   SignupRequest,
   SignupResponse
-} from "@/types/auth.ts";
+} from "@/types/auth-api.types.ts";
 
 export async function signup(signupRequest: SignupRequest): Promise<SignupResponse> {
   const body = JSON.stringify(signupRequest);
