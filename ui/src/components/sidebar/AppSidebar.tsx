@@ -10,50 +10,64 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar";
 import { useProfile } from "@/hooks/useProfile.ts";
+import { getAllDirectories } from "@/services/directory.service.ts";
+import { DirectoryDto } from "@/types/directory-api.types.ts";
+import { Directory } from "@/types/directory-ui.types.ts";
 import {
   ChevronDownSquareIcon,
   ChevronRightSquare,
-  Folder,
   FolderClosed,
   FolderOpen
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-const directories = [
-  {
-    name: "Home",
-    url: "/home",
-    icon: Folder,
-    children: [
-      {
-        name: "Documents",
-        url: "/home/documents",
-        icon: Folder,
-        children: [
-          {
-            name: "Reports",
-            url: "/home/documents/reports",
-            icon: Folder
-          },
-          {
-            name: "Invoices",
-            url: "/home/documents/invoices",
-            icon: Folder
-          }
-        ]
-      },
-      {
-        name: "Downloads",
-        url: "/home/downloads",
-        icon: Folder
-      }
-    ]
+function buildDirectoryTree(flat: DirectoryDto[]): Directory[] {
+  const idToNodeMap: Record<string, Directory> = {};
+  const root: Directory[] = [];
+
+  for (const dir of flat) {
+    idToNodeMap[dir.id] = {
+      id: dir.id,
+      name: dir.name,
+      url: `/directory/${dir.name}`,
+      children: []
+    };
   }
-];
+
+  for (const dir of flat) {
+    const node = idToNodeMap[dir.id];
+    if (dir.parentId) {
+      const parentNode = idToNodeMap[dir.parentId];
+      if (parentNode) {
+        parentNode.children!.push(node);
+      }
+      // TODO: We dont handle else part. This is probably an unexpected error case
+    } else {
+      root.push(node);
+    }
+  }
+
+  return root;
+}
+
 
 function AppSidebar() {
   const { profile } = useProfile();
+  const [ directories, setDirectories ] = useState<Directory[]>([]);
 
+
+  useEffect(() => {
+    getAllDirectories()
+      .then(body => {
+        const tree = buildDirectoryTree(body.directories);
+        setDirectories(tree);
+      })
+      .catch(err => {
+        console.log(err);
+        toast.error("Failed to load directories", { duration: 5000 });
+      });
+  }, [ directories ]);
 
   return (
     <Sidebar>
@@ -78,7 +92,8 @@ function AppSidebar() {
 }
 
 function Dir({ dir, level }: {
-  dir: { name: string, url: string, icon: any, children?: any[] }, level: number
+  dir: { name: string, url: string, children?: Directory[] },
+  level: number
 }) {
 
   const [ isExpanded, setIsExpanded ] = useState<boolean>(false);

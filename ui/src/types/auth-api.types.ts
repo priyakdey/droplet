@@ -10,9 +10,7 @@ export interface SignupResponse {
   token: string;
 }
 
-export interface ErrorResponse {
-  message: string;
-}
+
 
 export interface LoginRequest {
   email: string;

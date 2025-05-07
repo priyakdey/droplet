@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Service
 public class DirectoryServiceImpl implements DirectoryService {
+    private static final String HOME_DIR = "HOME";
 
     private final DirectoryRepository directoryRepository;
 
@@ -27,7 +28,7 @@ public class DirectoryServiceImpl implements DirectoryService {
     public ObjectId createHomeDir(long ownerId) {
         Directory homeDir = new Directory();
         homeDir.setOwnerId(ownerId);
-        homeDir.setName("home");
+        homeDir.setName(HOME_DIR);
         homeDir.setParentId(null);
 
         Instant now = Instant.now(Clock.systemUTC());
