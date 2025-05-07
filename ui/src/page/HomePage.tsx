@@ -13,6 +13,7 @@ import { useLocation } from "react-router-dom";
 
 function HomePage() {
   const [ directoryTree, setDirectoryTree ] = useState<Directory[]>([]);
+  const [ activeDirId, setActiveDirId ] = useState<string | null>(null);
 
   const location = useLocation();
 
@@ -21,6 +22,7 @@ function HomePage() {
       .then(body => {
         const tree = buildDirectoryTree(body.directories);
         setDirectoryTree(tree);
+        setActiveDirId(tree[0].id);
       })
       .catch(err => {
         console.log(err);
@@ -41,7 +43,8 @@ function HomePage() {
     <div className="page-container">
       <Header />
       <div className="sidebar-fixed">
-        <Layout directoryTree={directoryTree} />
+        <Layout directoryTree={directoryTree} activeDirId={activeDirId}
+                setActiveDirId={setActiveDirId} />
       </div>
       <div className="right-panel">
         <div className="breadcrumb-container">

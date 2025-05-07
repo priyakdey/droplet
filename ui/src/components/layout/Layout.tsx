@@ -7,14 +7,22 @@ import "./Layout.css";
 
 interface LayoutPropsTypes {
   directoryTree: Directory[],
-  children?: React.ReactNode | null
+  activeDirId: string | null;
+  setActiveDirId: (id: string) => void;
+  children?: React.ReactNode | null;
 }
 
-function Layout({ directoryTree, children }: LayoutPropsTypes) {
+function Layout({
+                  directoryTree,
+                  activeDirId,
+                  setActiveDirId,
+                  children
+                }: LayoutPropsTypes) {
   return (
     <SidebarProvider>
       <div className="page-container">
-        <AppSidebar directoryTree={directoryTree} />
+        <AppSidebar directoryTree={directoryTree} activeDirId={activeDirId}
+                    setActiveDirId={setActiveDirId} />
         <main className="main-content">
           {children}
           <Outlet />

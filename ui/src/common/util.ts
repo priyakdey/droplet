@@ -9,7 +9,7 @@ export function buildDirectoryTree(flat: DirectoryDto[]): Directory[] {
     idToNodeMap[dir.id] = {
       id: dir.id,
       name: dir.name,
-      url: `/directory/${dir.name}`,
+      url: `/${dir.name}`,
       children: []
     };
   }

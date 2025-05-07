@@ -1,4 +1,5 @@
 import Button from "@/components/button/Button.tsx";
+import Dir from "@/components/dir/Dir.tsx";
 import {
   Sidebar,
   SidebarContent,
@@ -6,27 +7,24 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenu
 } from "@/components/ui/sidebar";
 import { useProfile } from "@/hooks/useProfile.ts";
 import { Directory } from "@/types/directory-ui.types.ts";
-import {
-  ChevronDownSquareIcon,
-  ChevronRightSquare,
-  FolderClosed,
-  FolderOpen
-} from "lucide-react";
-import { useState } from "react";
 
 import "./AppSidebar.css";
 
 interface AppSideBarPropsType {
   directoryTree: Directory[];
+  activeDirId: string | null;
+  setActiveDirId: (id: string) => void;
 }
 
-function AppSidebar({ directoryTree }: AppSideBarPropsType) {
+function AppSidebar({
+                      directoryTree,
+                      activeDirId,
+                      setActiveDirId
+                    }: AppSideBarPropsType) {
   const { profile } = useProfile();
 
   return (
@@ -44,7 +42,9 @@ function AppSidebar({ directoryTree }: AppSideBarPropsType) {
             <SidebarMenu>
               {
                 directoryTree.map((dir) => ((
-                  <Dir key={dir.name} dir={dir} level={1} />
+                  <Dir key={dir.name} dir={dir} level={0}
+                       activeDirId={activeDirId}
+                       setActiveDirId={setActiveDirId} />
                 )))
               }
             </SidebarMenu>
@@ -54,46 +54,5 @@ function AppSidebar({ directoryTree }: AppSideBarPropsType) {
     </Sidebar>
   );
 }
-
-function Dir({ dir, level }: {
-  dir: { name: string, url: string, children?: Directory[] },
-  level: number
-}) {
-
-  const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
-
-  const toggleExpand = () => setIsExpanded((prev) => !prev);
-  const style = { "paddingLeft": `${level * 12}px`};
-
-  return (
-    <>
-      <SidebarMenuItem style={style}>
-        <SidebarMenuButton onClick={toggleExpand}>
-          {
-            (dir.children?.length ?? 0) > 0
-              ? isExpanded ? <ChevronDownSquareIcon /> : <ChevronRightSquare />
-              : null
-          }
-          {
-            (dir.children?.length ?? 0) > 0
-              ? isExpanded ? <FolderOpen /> : <FolderClosed />
-              : <FolderClosed />
-          }
-          <span>{dir.name}</span>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-      <div
-        className={`sidebar-folder-expandable ${isExpanded ? "expanded" : ""}`}>
-        {
-          isExpanded && (dir.children?.length ?? 0) > 0 &&
-          dir.children!.map((child) => (
-            <Dir dir={child} key={child.name} level={level + 1} />
-          ))
-        }
-      </div>
-    </>
-  );
-}
-
 
 export default AppSidebar;

@@ -1,0 +1,10 @@
+.sidebar-folder-expandable {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 10s ease;
+}
+
+.sidebar-folder-expandable.expanded {
+  max-height: 2000px;
+  transition: max-height 10s ease;
+}
