@@ -1,3 +1,4 @@
+import Button from "@/components/button/Button.tsx";
 import {
   Sidebar,
   SidebarContent,
@@ -10,8 +11,6 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar";
 import { useProfile } from "@/hooks/useProfile.ts";
-import { getAllDirectories } from "@/services/directory.service.ts";
-import { DirectoryDto } from "@/types/directory-api.types.ts";
 import { Directory } from "@/types/directory-ui.types.ts";
 import {
   ChevronDownSquareIcon,
@@ -19,67 +18,33 @@ import {
   FolderClosed,
   FolderOpen
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 
-function buildDirectoryTree(flat: DirectoryDto[]): Directory[] {
-  const idToNodeMap: Record<string, Directory> = {};
-  const root: Directory[] = [];
+import "./AppSidebar.css";
 
-  for (const dir of flat) {
-    idToNodeMap[dir.id] = {
-      id: dir.id,
-      name: dir.name,
-      url: `/directory/${dir.name}`,
-      children: []
-    };
-  }
-
-  for (const dir of flat) {
-    const node = idToNodeMap[dir.id];
-    if (dir.parentId) {
-      const parentNode = idToNodeMap[dir.parentId];
-      if (parentNode) {
-        parentNode.children!.push(node);
-      }
-      // TODO: We dont handle else part. This is probably an unexpected error case
-    } else {
-      root.push(node);
-    }
-  }
-
-  return root;
+interface AppSideBarPropsType {
+  directoryTree: Directory[];
 }
 
-
-function AppSidebar() {
+function AppSidebar({ directoryTree }: AppSideBarPropsType) {
   const { profile } = useProfile();
-  const [ directories, setDirectories ] = useState<Directory[]>([]);
-
-
-  useEffect(() => {
-    getAllDirectories()
-      .then(body => {
-        const tree = buildDirectoryTree(body.directories);
-        setDirectories(tree);
-      })
-      .catch(err => {
-        console.log(err);
-        toast.error("Failed to load directories", { duration: 5000 });
-      });
-  }, [ directories ]);
 
   return (
     <Sidebar>
       <SidebarHeader>Hello, {profile?.name}</SidebarHeader>
       <SidebarContent>
+        <div className="app-sidebar-new-dir-container">
+          <Button type="button" variant="default">
+            + New Directory
+          </Button>
+        </div>
         <SidebarGroup>
           <SidebarGroupLabel>Directories</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {
-                directories.map((dir) => ((
-                  <Dir key={dir.name} dir={dir} level={0} />
+                directoryTree.map((dir) => ((
+                  <Dir key={dir.name} dir={dir} level={1} />
                 )))
               }
             </SidebarMenu>
@@ -87,8 +52,7 @@ function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
-    ;
+  );
 }
 
 function Dir({ dir, level }: {
@@ -99,10 +63,10 @@ function Dir({ dir, level }: {
   const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
 
   const toggleExpand = () => setIsExpanded((prev) => !prev);
-  const className = `pl-${level * 4}`;
+  const style = { "paddingLeft": `${level * 4}px` };
 
   return (
-    <SidebarMenuItem className={className}>
+    <SidebarMenuItem style={style}>
       <SidebarMenuButton onClick={toggleExpand}>
         {
           (dir.children?.length ?? 0) > 0
@@ -116,14 +80,15 @@ function Dir({ dir, level }: {
         }
         <span>{dir.name}</span>
       </SidebarMenuButton>
-
-      {
-        isExpanded && (dir.children?.length ?? 0) > 0 &&
-        dir.children!.map((child) => (
-          <Dir dir={child} key={child.name} level={level + 1} />
-        ))
-      }
-
+      <div
+        className={`sidebar-folder-expandable ${isExpanded ? "expanded" : ""}`}>
+        {
+          isExpanded && (dir.children?.length ?? 0) > 0 &&
+          dir.children!.map((child) => (
+            <Dir dir={child} key={child.name} level={level + 1} />
+          ))
+        }
+      </div>
     </SidebarMenuItem>
   );
 }

@@ -5,3 +5,58 @@
 /*   justify-content: center; */
 /*   align-items: center; */
 /* } */
+
+.sidebar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: var(--sidebar);
+  color: var(--sidebar-foreground);
+  padding: 20px;
+}
+
+.right-panel {
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.breadcrumb-container {
+  height: 5vh;
+  margin: 20px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+}
+
+/* For WebKit-based browsers (Chrome, Edge, Safari) */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* For Firefox */
+.main-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) var(--background);
+}
+
+
