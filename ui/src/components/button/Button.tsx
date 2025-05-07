@@ -1,24 +1,25 @@
 import { Button as ShadcnButton } from "@/components/ui/button.tsx";
+import * as React from "react";
 
 export interface ButtonProps {
   className?: string;
   type: "submit" | "button" | "reset";
-  innerHtmlText: string;
   variant?: "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 function Button({
                   className,
                   type,
-                  innerHtmlText,
                   variant,
-                  onClick
+                  onClick,
+                  children
                 }: ButtonProps) {
   return (
     <ShadcnButton type={type} variant={variant}
                   className={className} onClick={onClick}>
-      {innerHtmlText}
+      {children}
     </ShadcnButton>
   );
 }

@@ -20,9 +20,13 @@ function Header() {
       <img src={dropletSvgUrl} alt="Droplet logo" className="droplet-logo" />
       <div
         className="container flex flex-row justify-around items-center w-1/4">
-        {isLoggedIn &&
-          <Button className="h-8 w-30" type="button" innerHtmlText="Logout"
-                  variant="destructive" onClick={handleLogout} />}
+        {
+          isLoggedIn &&
+          <Button className="h-8 w-30" type="button" variant="destructive"
+                  onClick={handleLogout}>
+            Logout
+          </Button>
+        }
       </div>
     </header>
   );

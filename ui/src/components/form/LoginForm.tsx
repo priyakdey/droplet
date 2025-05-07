@@ -83,14 +83,16 @@ export function LoginForm({ handleSignupClick }: LoginFromProps) {
               </FormItem>
             )}>
           </FormField>
-          <Button className="submit-button" type="submit"
-                  innerHtmlText="Login" variant="default" />
+          <Button className="submit-button" type="submit" variant="default">
+            Login
+          </Button>
         </form>
       </Form>
       <span className="form-bottom-text">Don't have an account?</span>
-      <Button className="submit-button" type="button"
-              innerHtmlText="Sign Up" variant="default"
-              onClick={handleSignupClick} />
+      <Button className="submit-button" type="button" variant="default"
+              onClick={handleSignupClick}>
+        Sign Up
+      </Button>
     </div>
   );
 }

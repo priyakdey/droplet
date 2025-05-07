@@ -101,14 +101,16 @@ function SignupForm({ handleLoginClick }: SignupFormProps) {
               </FormItem>
             )}>
           </FormField>
-          <Button className="submit-button" type="submit"
-                  innerHtmlText="Sign Up" variant="default" />
+          <Button className="submit-button" type="submit" variant="default">
+            Sign Up
+          </Button>
         </form>
       </Form>
       <span className="form-bottom-text">Already have an account?</span>
-      <Button className="submit-button" type="button"
-              innerHtmlText="Login" variant="default"
-              onClick={handleLoginClick} />
+      <Button className="submit-button" type="button" variant="default"
+              onClick={handleLoginClick}>
+        Login
+      </Button>
     </div>
   );
 }
