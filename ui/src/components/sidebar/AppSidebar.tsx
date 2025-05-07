@@ -63,23 +63,25 @@ function Dir({ dir, level }: {
   const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
 
   const toggleExpand = () => setIsExpanded((prev) => !prev);
-  const style = { "paddingLeft": `${level * 4}px` };
+  const style = { "paddingLeft": `${level * 12}px`};
 
   return (
-    <SidebarMenuItem style={style}>
-      <SidebarMenuButton onClick={toggleExpand}>
-        {
-          (dir.children?.length ?? 0) > 0
-            ? isExpanded ? <ChevronDownSquareIcon /> : <ChevronRightSquare />
-            : null
-        }
-        {
-          (dir.children?.length ?? 0) > 0
-            ? isExpanded ? <FolderOpen /> : <FolderClosed />
-            : <FolderClosed />
-        }
-        <span>{dir.name}</span>
-      </SidebarMenuButton>
+    <>
+      <SidebarMenuItem style={style}>
+        <SidebarMenuButton onClick={toggleExpand}>
+          {
+            (dir.children?.length ?? 0) > 0
+              ? isExpanded ? <ChevronDownSquareIcon /> : <ChevronRightSquare />
+              : null
+          }
+          {
+            (dir.children?.length ?? 0) > 0
+              ? isExpanded ? <FolderOpen /> : <FolderClosed />
+              : <FolderClosed />
+          }
+          <span>{dir.name}</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
       <div
         className={`sidebar-folder-expandable ${isExpanded ? "expanded" : ""}`}>
         {
@@ -89,7 +91,7 @@ function Dir({ dir, level }: {
           ))
         }
       </div>
-    </SidebarMenuItem>
+    </>
   );
 }
 
