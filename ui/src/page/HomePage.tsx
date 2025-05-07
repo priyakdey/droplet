@@ -12,7 +12,9 @@ function HomePage() {
         <aside>
           <Layout />
         </aside>
-        Home Page Content
+        <section>
+          <p>Hello</p>
+        </section>
       </main>
       <Footer />
     </div>
