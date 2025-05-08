@@ -72,6 +72,9 @@ function CreateDirForm({
           )}>
           </FormField>
           <Button className="submit-button" type="submit">
+            Cancel
+          </Button>
+          <Button className="submit-button" type="submit">
             Create
           </Button>
         </form>

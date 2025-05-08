@@ -20,7 +20,7 @@ interface DirPropsType {
 }
 
 function Dir({ dir, level, activeDirId, setActiveDirId }: DirPropsType) {
-  const [ isExpanded, setIsExpanded ] = useState<boolean>(true);
+  const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
 
   const style = { "paddingLeft": `${level * 12}px` };
 

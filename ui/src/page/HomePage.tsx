@@ -7,7 +7,7 @@ import Header from "@/components/header/Header.tsx";
 import Layout from "@/components/layout/Layout.tsx";
 import { getAllDirectories } from "@/services/directory.service.ts";
 import { Directory } from "@/types/directory-ui.types.ts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import "./HomePage.css";
@@ -21,7 +21,7 @@ function HomePage() {
 
   const navigate = useNavigate();
 
-  const refreshDirectoryTree: () => void = () => {
+  const refreshDirectoryTree: () => void = useCallback(() => {
     getAllDirectories()
       .then(body => {
         const directoryDtos = body.directories;
@@ -30,17 +30,16 @@ function HomePage() {
         setIdToDirectory(idToDirectoryMap);
         setActiveDirId(root[0].id);
         setIdToParentDirectory(buildParentMap(idToDirectoryMap));
-        navigate(`/${idToDirectoryMap.get(activeDirId!)!.url}`);
       })
       .catch(err => {
         console.error(err);
         toast.error("Failed to load directories", { duration: 5000 });
       });
-  };
+  }, [ navigate, activeDirId ]);
 
   useEffect(() => {
     refreshDirectoryTree();
-  }, []);
+  }, [ refreshDirectoryTree ]);
 
   const selectCurrDir: (dirId: string) => void = (dirId) => {
     setActiveDirId(dirId);

@@ -20,7 +20,7 @@ function Popover({ children }: PopoverPropsType) {
 
   return (
     <ShadcnPopover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button type="button" variant="default" className="popover-btn">
           <PlusCircle />
           <span className="popover-new-dir-text">New Directory</span>
