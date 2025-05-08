@@ -1,31 +1,69 @@
 import { DirectoryDto } from "@/types/directory-api.types.ts";
 import { Directory } from "@/types/directory-ui.types.ts";
 
-export function buildDirectoryTree(flat: DirectoryDto[]): Directory[] {
-  const idToNodeMap: Record<string, Directory> = {};
+export function buildDirectoryTree(flat: DirectoryDto[]): {
+  root: Directory[];
+  idToDirectoryMap: Map<string, Directory>;
+} {
+  const idToDirectoryMap: Map<string, Directory> = new Map<string, Directory>();
   const root: Directory[] = [];
 
   for (const dir of flat) {
-    idToNodeMap[dir.id] = {
+    const node = {
       id: dir.id,
       name: dir.name,
-      url: `/${dir.name}`,
-      children: []
+      url: "",
+      children: [],
+      parentId: dir.parentId
     };
-  }
+    idToDirectoryMap.set(dir.id, node);
 
-  for (const dir of flat) {
-    const node = idToNodeMap[dir.id];
-    if (dir.parentId) {
-      const parentNode = idToNodeMap[dir.parentId];
-      if (parentNode) {
-        parentNode.children!.push(node);
-      }
-      // TODO: We dont handle else part. Most likely to never happen, but if it does, unexpected error
-    } else {
+    if (dir.parentId === null) {
       root.push(node);
     }
   }
 
-  return root;
+  for (const dir of flat) {
+    const node = idToDirectoryMap.get(dir.id);
+    if (dir.parentId !== null) {
+      const parentNode = idToDirectoryMap.get(dir.parentId);
+      if (parentNode && node) {
+        parentNode.children!.push(node);
+      }
+    }
+  }
+
+  // Compute URLs for each node
+  const buffer: string[] = [];
+  computeUrls(root[0], buffer);
+
+  return { root, idToDirectoryMap };
 }
+
+export function buildParentMap(idToDirectoryMap: Map<string, Directory>) {
+  const idToParentMap: Map<string, Directory> = new Map<string, Directory>();
+
+  for (const id of idToDirectoryMap.keys()) {
+    const parentId = idToDirectoryMap.get(id)!.parentId;
+    if (parentId === null) continue;
+    const parent = idToDirectoryMap.get(parentId)!;
+    idToParentMap.set(id, parent);
+  }
+
+  return idToParentMap;
+}
+
+function computeUrls(node: Directory, buffer: string[]) {
+  const currentPath = node.name;
+  buffer.push(currentPath);
+  node.url = buffer.join("/");
+  if (node.children) {
+    for (const child of node.children) {
+      computeUrls(child, buffer);
+    }
+  }
+  buffer.pop();
+}
+
+
+

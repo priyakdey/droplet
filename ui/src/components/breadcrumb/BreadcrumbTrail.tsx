@@ -5,13 +5,14 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb.tsx";
 
-export interface Crumbs {
+export interface Crumb {
+  id: string;
   label: string;
   href: string;
 }
 
 interface BreadcrumbTrailProps {
-  crumbs: Crumbs[];
+  crumbs: Crumb[];
 }
 
 function BreadcrumbTrail({ crumbs }: BreadcrumbTrailProps) {
@@ -20,7 +21,7 @@ function BreadcrumbTrail({ crumbs }: BreadcrumbTrailProps) {
       <BreadcrumbList>
         {
           crumbs.map((crumb, idx) => (
-            <span key={crumb.href} className="flex items-center">
+            <span key={crumb.href} className="flex items-center gap-3">
               <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
               {idx < crumbs.length - 1 && <BreadcrumbSeparator />}
             </span>
