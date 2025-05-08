@@ -55,7 +55,7 @@ function Dir({ dir, level, activeDirId, setActiveDirId }: DirPropsType) {
         {
           isExpanded && (dir.children?.length ?? 0) > 0 &&
           dir.children!.map((child) => (
-            <Dir dir={child} key={child.name} level={level + 1}
+            <Dir dir={child} key={child.url} level={level + 1}
                  activeDirId={activeDirId} setActiveDirId={setActiveDirId} />
           ))
         }

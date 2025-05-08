@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Priyak Dey
@@ -14,4 +15,6 @@ import java.util.List;
 public interface DirectoryRepository extends MongoRepository<Directory, ObjectId> {
 
     List<Directory> findByOwnerId(long ownerId);
+
+    Optional<Directory> findByOwnerIdAndParentIdAndName(long ownerId, ObjectId parentId, String name);
 }

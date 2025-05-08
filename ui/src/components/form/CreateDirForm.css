@@ -1,0 +1,22 @@
+.createdir-form-control-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 20px;
+}
+
+.createdir-submit-button {
+  width: 40%;
+  padding: 0.75rem;
+  background-color: var(--secondary);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.createdir-submit-button:hover {
+  background-color: #5A28C7;
+}

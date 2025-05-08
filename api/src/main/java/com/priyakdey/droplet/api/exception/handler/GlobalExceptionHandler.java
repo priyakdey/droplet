@@ -1,6 +1,7 @@
 package com.priyakdey.droplet.api.exception.handler;
 
 import com.priyakdey.droplet.api.exception.AccountDoesNotExistException;
+import com.priyakdey.droplet.api.exception.DirectoryExistsException;
 import com.priyakdey.droplet.api.exception.EmailExistsException;
 import com.priyakdey.droplet.api.exception.InvalidCredentialsException;
 import com.priyakdey.droplet.api.model.response.ErrorResponse;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(EmailExistsException.class)
+    @ExceptionHandler({EmailExistsException.class, DirectoryExistsException.class})
     public ResponseEntity<ErrorResponse> handleBadRequestException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());

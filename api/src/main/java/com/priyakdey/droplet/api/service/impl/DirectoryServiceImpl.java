@@ -2,6 +2,7 @@ package com.priyakdey.droplet.api.service.impl;
 
 import com.priyakdey.droplet.api.dto.DirectoryDto;
 import com.priyakdey.droplet.api.entity.Directory;
+import com.priyakdey.droplet.api.exception.DirectoryExistsException;
 import com.priyakdey.droplet.api.repository.DirectoryRepository;
 import com.priyakdey.droplet.api.service.DirectoryService;
 import org.bson.types.ObjectId;
@@ -47,6 +48,10 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     @Override
     public DirectoryDto createDir(String name, ObjectId parentId, long ownerId) {
+        directoryRepository.findByOwnerIdAndParentIdAndName(ownerId, parentId, name)
+                .ifPresent(dir -> {
+                    throw new DirectoryExistsException("Directory with same name already exists");
+                });
         Directory dir = new Directory();
         dir.setName(name);
         dir.setParentId(parentId);

@@ -1,11 +1,11 @@
-import { API_V1_SIGNUP, API_V1_LOGIN } from "@/common/constant";
+import { API_V1_LOGIN, API_V1_SIGNUP } from "@/common/constant";
 import {
-  ErrorResponse,
   LoginRequest,
   LoginResponse,
   SignupRequest,
   SignupResponse
 } from "@/types/auth-api.types.ts";
+import { ErrorResponse } from "@/types/error-api.types.ts";
 
 export async function signup(signupRequest: SignupRequest): Promise<SignupResponse> {
   const body = JSON.stringify(signupRequest);

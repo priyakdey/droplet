@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import "./CreateDirForm.css";
 
 const createNewDirFormSchema = z.object({
   name: z.string()
@@ -57,6 +58,11 @@ function CreateDirForm({
 
   };
 
+  const onCancel: () => void = () => {
+    form.reset();
+    onClose();
+  };
+
   return (
     <div className="grid gap-4">
       <h4 className="font-medium leading-none">New Directory</h4>
@@ -71,12 +77,15 @@ function CreateDirForm({
             </FormItem>
           )}>
           </FormField>
-          <Button className="submit-button" type="submit">
-            Cancel
-          </Button>
-          <Button className="submit-button" type="submit">
-            Create
-          </Button>
+          <div className="createdir-form-control-container">
+            <Button className="createdir-submit-button" type="button"
+                    onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button className="createdir-submit-button" type="submit">
+              Create
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

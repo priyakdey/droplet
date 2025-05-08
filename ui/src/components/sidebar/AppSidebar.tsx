@@ -55,7 +55,7 @@ function AppSidebar({
             <SidebarMenu>
               {
                 directoryTree.map((dir) => ((
-                  <Dir key={dir.name} dir={dir} level={0}
+                  <Dir key={dir.url} dir={dir} level={0}
                        activeDirId={activeDirId}
                        setActiveDirId={setActiveDirId} />
                 )))

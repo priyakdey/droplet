@@ -35,7 +35,7 @@ function HomePage() {
         console.error(err);
         toast.error("Failed to load directories", { duration: 5000 });
       });
-  }, [ navigate, activeDirId ]);
+  }, []);
 
   useEffect(() => {
     refreshDirectoryTree();
@@ -50,11 +50,11 @@ function HomePage() {
   };
 
   const generateCrumbs: () => Crumb[] = () => {
-    let dirId = activeDirId!;
-    if (!dirId) {
+    if (!activeDirId || !idToDirectory.has(activeDirId)) {
       return [];
     }
 
+    let dirId = activeDirId;
     const crumbs: Crumb[] = [];
 
     while (true) {
