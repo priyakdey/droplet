@@ -5,7 +5,8 @@ import {
 import { Directory } from "@/types/directory-ui.types.ts";
 import {
   ChevronDownSquareIcon,
-  ChevronRightSquare, FolderClosed,
+  ChevronRightSquare,
+  FolderClosed,
   FolderOpen
 } from "lucide-react";
 import { useState } from "react";
@@ -14,22 +15,22 @@ import "./Dir.css";
 interface DirPropsType {
   dir: Directory;
   level: number;
-  activeDir: Directory | null;
-  setActiveDir: (dir: Directory) => void;
+  activeDirId: string;
+  setActiveDirId: (dirId: string) => void;
 }
 
-function Dir({ dir, level, activeDir, setActiveDir }: DirPropsType) {
-  const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
+function Dir({ dir, level, activeDirId, setActiveDirId }: DirPropsType) {
+  const [ isExpanded, setIsExpanded ] = useState<boolean>(true);
 
   const style = { "paddingLeft": `${level * 12}px` };
 
   const onChevronClick = () => setIsExpanded((prev) => !prev);
-  const onDirClick = () => setActiveDir(dir);
+  const onDirClick = () => setActiveDirId(dir.id);
 
   return (
     <>
       <SidebarMenuItem style={style}>
-        <SidebarMenuButton isActive={activeDir!.id === dir.id}
+        <SidebarMenuButton isActive={activeDirId === dir.id}
                            onClick={onDirClick}>
           <div role="button" aria-roledescription="works like a button"
                tabIndex={0} onClick={onChevronClick}
@@ -55,7 +56,7 @@ function Dir({ dir, level, activeDir, setActiveDir }: DirPropsType) {
           isExpanded && (dir.children?.length ?? 0) > 0 &&
           dir.children!.map((child) => (
             <Dir dir={child} key={child.name} level={level + 1}
-                 activeDir={activeDir} setActiveDir={setActiveDir} />
+                 activeDirId={activeDirId} setActiveDirId={setActiveDirId} />
           ))
         }
       </div>

@@ -5,6 +5,19 @@ export function buildDirectoryTree(flat: DirectoryDto[]): {
   root: Directory[];
   idToDirectoryMap: Map<string, Directory>;
 } {
+
+  function computeUrls(node: Directory, buffer: string[]) {
+    const currentPath = node.name.toLowerCase();
+    buffer.push(currentPath);
+    node.url = buffer.join("/");
+    if (node.children) {
+      for (const child of node.children) {
+        computeUrls(child, buffer);
+      }
+    }
+    buffer.pop();
+  }
+
   const idToDirectoryMap: Map<string, Directory> = new Map<string, Directory>();
   const root: Directory[] = [];
 
@@ -51,18 +64,6 @@ export function buildParentMap(idToDirectoryMap: Map<string, Directory>) {
   }
 
   return idToParentMap;
-}
-
-function computeUrls(node: Directory, buffer: string[]) {
-  const currentPath = node.name;
-  buffer.push(currentPath);
-  node.url = buffer.join("/");
-  if (node.children) {
-    for (const child of node.children) {
-      computeUrls(child, buffer);
-    }
-  }
-  buffer.pop();
 }
 
 

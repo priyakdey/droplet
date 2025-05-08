@@ -18,7 +18,7 @@ function SignupPage() {
   return (
     <div className="page-container">
       <Header />
-      <main className="main-content">
+      <main className="form-main-content">
         <SignupForm handleLoginClick={() => navigate("/")} />
       </main>
       <Footer />

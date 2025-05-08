@@ -16,14 +16,14 @@ import "./AppSidebar.css";
 
 interface AppSideBarPropsType {
   directoryTree: Directory[];
-  currDir: Directory | null;
-  setCurrDir: (dir: Directory) => void;
+  activeDirId: string;
+  setActiveDirId: (dir: string) => void;
 }
 
 function AppSidebar({
                       directoryTree,
-                      currDir,
-                      setCurrDir
+                      activeDirId,
+                      setActiveDirId
                     }: AppSideBarPropsType) {
   const { profile } = useProfile();
 
@@ -43,8 +43,8 @@ function AppSidebar({
               {
                 directoryTree.map((dir) => ((
                   <Dir key={dir.name} dir={dir} level={0}
-                       activeDir={currDir}
-                       setActiveDir={setCurrDir} />
+                       activeDirId={activeDirId}
+                       setActiveDirId={setActiveDirId} />
                 )))
               }
             </SidebarMenu>
