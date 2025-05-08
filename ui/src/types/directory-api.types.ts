@@ -10,3 +10,17 @@ export interface DirectoryDto {
 export interface DirectoryListResponse {
   directories: DirectoryDto[];
 }
+
+export interface NewDirectoryRequest {
+  name: string;
+  parentId: string;
+}
+
+export interface NewDirectoryResponse {
+  id: string;
+  name: string;
+  parentId: string;
+  ownerId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -1,5 +1,6 @@
-import Button from "@/components/button/Button.tsx";
 import Dir from "@/components/dir/Dir.tsx";
+import CreateDirForm from "@/components/form/CreateDirForm.tsx";
+import Popover from "@/components/popover/Popover.tsx";
 import {
   Sidebar,
   SidebarContent,
@@ -18,23 +19,35 @@ interface AppSideBarPropsType {
   directoryTree: Directory[];
   activeDirId: string;
   setActiveDirId: (dir: string) => void;
+  refreshDirectoryTree: () => void;
 }
 
 function AppSidebar({
                       directoryTree,
                       activeDirId,
-                      setActiveDirId
+                      setActiveDirId,
+                      refreshDirectoryTree
                     }: AppSideBarPropsType) {
   const { profile } = useProfile();
 
+
   return (
     <Sidebar>
-      <SidebarHeader>Hello, {profile?.name}</SidebarHeader>
+      <SidebarHeader className="app-sidebar-header">
+        Welcome, {profile?.name}
+      </SidebarHeader>
       <SidebarContent>
         <div className="app-sidebar-new-dir-container">
-          <Button type="button" variant="default">
-            + New Directory
-          </Button>
+          <Popover>
+            {
+              (onClose) => (
+                <CreateDirForm activeDirId={activeDirId}
+                               setActiveDirId={setActiveDirId}
+                               refreshDirectoryTree={refreshDirectoryTree}
+                               onClose={onClose} />
+              )
+            }
+          </Popover>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Directories</SidebarGroupLabel>

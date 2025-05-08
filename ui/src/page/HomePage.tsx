@@ -21,7 +21,7 @@ function HomePage() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const refreshDirectoryTree: () => void = () => {
     getAllDirectories()
       .then(body => {
         const directoryDtos = body.directories;
@@ -30,11 +30,16 @@ function HomePage() {
         setIdToDirectory(idToDirectoryMap);
         setActiveDirId(root[0].id);
         setIdToParentDirectory(buildParentMap(idToDirectoryMap));
+        navigate(`/${idToDirectoryMap.get(activeDirId!)!.url}`);
       })
       .catch(err => {
         console.error(err);
-        toast.error("Failed to load directoryTree", { duration: 5000 });
+        toast.error("Failed to load directories", { duration: 5000 });
       });
+  };
+
+  useEffect(() => {
+    refreshDirectoryTree();
   }, []);
 
   const selectCurrDir: (dirId: string) => void = (dirId) => {
@@ -73,7 +78,8 @@ function HomePage() {
       <Header />
       <div className="sidebar-fixed">
         <Layout directoryTree={directoryTree} activeDirId={activeDirId!}
-                setActiveDirId={selectCurrDir} />
+                setActiveDirId={selectCurrDir}
+                refreshDirectoryTree={refreshDirectoryTree} />
       </div>
       <div className="right-panel">
         <div className="breadcrumb-container">

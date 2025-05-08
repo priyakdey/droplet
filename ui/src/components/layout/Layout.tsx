@@ -9,6 +9,7 @@ interface LayoutPropsTypes {
   directoryTree: Directory[],
   activeDirId: string;
   setActiveDirId: (dir: string) => void;
+  refreshDirectoryTree: () => void;
   children?: React.ReactNode | null;
 }
 
@@ -16,13 +17,15 @@ function Layout({
                   directoryTree,
                   activeDirId,
                   setActiveDirId,
+                  refreshDirectoryTree,
                   children
                 }: LayoutPropsTypes) {
   return (
     <SidebarProvider>
       <div className="page-container">
         <AppSidebar directoryTree={directoryTree} activeDirId={activeDirId}
-                    setActiveDirId={setActiveDirId} />
+                    setActiveDirId={setActiveDirId}
+                    refreshDirectoryTree={refreshDirectoryTree} />
         <main className="main-content">
           {children}
           <Outlet />

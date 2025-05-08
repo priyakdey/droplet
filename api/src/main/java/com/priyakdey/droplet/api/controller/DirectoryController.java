@@ -8,14 +8,18 @@ import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.security.Principal;
 import java.util.List;
 
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+
 /**
-* @author Priyak Dey
-*/
+ * @author Priyak Dey
+ */
 @RestController
-@RequestMapping("/v1/directories")
+@RequestMapping(path = "/v1/directories", consumes = APPLICATION_JSON_VALUE,
+        produces = APPLICATION_JSON_VALUE)
 public class DirectoryController {
 
     private final DirectoryService directoryService;
@@ -34,16 +38,16 @@ public class DirectoryController {
     }
 
     @PostMapping
-    public ResponseEntity<NewDirectoryResponse> createDir(Principal principal,
-                                          @RequestBody NewDirectoryRequest newDirectoryRequest) {
+    public ResponseEntity<NewDirectoryResponse> createDir(
+            @RequestBody NewDirectoryRequest newDirectoryRequest, Principal principal) {
         long ownerId = Long.parseLong(principal.getName());
         String name = newDirectoryRequest.getName();
-        ObjectId parentId = new ObjectId();
+        ObjectId parentId = new ObjectId(newDirectoryRequest.getParentId());
         DirectoryDto dir = directoryService.createDir(name, parentId, ownerId);
 
         NewDirectoryResponse responseBody = new NewDirectoryResponse(dir.id(), dir.name(),
                 dir.parentId(), dir.ownerId(), dir.createdAt(), dir.updatedAt());
-        return ResponseEntity.ok().body(responseBody);
+        return ResponseEntity.created(URI.create("")).body(responseBody);
     }
 
 }
