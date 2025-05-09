@@ -1,3 +1,10 @@
+.sidebar-chevron {
+  height: 16px;
+  width: 16px;
+  display: flex;
+  align-items: center;
+}
+
 .sidebar-folder-expandable {
   max-height: 0;
   overflow: hidden;

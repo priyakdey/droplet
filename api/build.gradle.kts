@@ -23,11 +23,14 @@ repositories {
     mavenCentral()
 }
 
+extra["springCloudAzureVersion"] = "5.22.0"
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("com.azure.spring:spring-cloud-azure-starter-storage")
     implementation("com.auth0:java-jwt:4.5.0")
 
     runtimeOnly("org.postgresql:postgresql")
@@ -37,6 +40,13 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+
+dependencyManagement {
+    imports {
+        mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
+    }
+}
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

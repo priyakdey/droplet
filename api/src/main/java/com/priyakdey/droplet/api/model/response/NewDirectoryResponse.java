@@ -1,6 +1,4 @@
-package com.priyakdey.droplet.api.controller;
-
-import org.bson.types.ObjectId;
+package com.priyakdey.droplet.api.model.response;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -6,8 +6,8 @@ import { Directory } from "@/types/directory-ui.types.ts";
 import {
   ChevronDownSquareIcon,
   ChevronRightSquare,
-  FolderClosed,
-  FolderOpen
+  FolderClosedIcon,
+  FolderOpenIcon
 } from "lucide-react";
 import { useState } from "react";
 import "./Dir.css";
@@ -24,7 +24,11 @@ function Dir({ dir, level, activeDirId, setActiveDirId }: DirPropsType) {
 
   const style = { "paddingLeft": `${level * 12}px` };
 
-  const onChevronClick = () => setIsExpanded((prev) => !prev);
+  const onChevronClick = () => {
+    if (dir.children && dir.children.length > 0) {
+      setIsExpanded((prev) => !prev);
+    }
+  };
   const onDirClick = () => setActiveDirId(dir.id);
 
   return (
@@ -34,18 +38,18 @@ function Dir({ dir, level, activeDirId, setActiveDirId }: DirPropsType) {
                            onClick={onDirClick}>
           <div role="button" aria-roledescription="works like a button"
                tabIndex={0} onClick={onChevronClick}
-               style={{ height: "16", width: "16px" }}>
+               className="sidebar-chevron">
             {
-              (dir.children?.length ?? 0) > 0
-                ? isExpanded ? <ChevronDownSquareIcon size={16} /> :
-                  <ChevronRightSquare size={16} />
-                : null
+              isExpanded
+                ? <ChevronDownSquareIcon size={14} />
+                : <ChevronRightSquare size={14} />
             }
           </div>
           {
             (dir.children?.length ?? 0) > 0
-              ? isExpanded ? <FolderOpen /> : <FolderClosed />
-              : <FolderClosed />
+              ? isExpanded ? <FolderOpenIcon size={16} />
+                : <FolderClosedIcon size={16} />
+              : <FolderClosedIcon />
           }
           <span>{dir.name}</span>
         </SidebarMenuButton>

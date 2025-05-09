@@ -1,11 +1,15 @@
 package com.priyakdey.droplet.api.model.response;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * @author Priyak Dey
  */
 public class LoginResponse implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5276382511473471608L;
 
     private Long id;
     private String name;

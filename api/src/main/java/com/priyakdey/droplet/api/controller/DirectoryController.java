@@ -3,6 +3,7 @@ package com.priyakdey.droplet.api.controller;
 import com.priyakdey.droplet.api.dto.DirectoryDto;
 import com.priyakdey.droplet.api.model.request.NewDirectoryRequest;
 import com.priyakdey.droplet.api.model.response.DirectoryListResponse;
+import com.priyakdey.droplet.api.model.response.NewDirectoryResponse;
 import com.priyakdey.droplet.api.service.DirectoryService;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;

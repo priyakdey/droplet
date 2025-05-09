@@ -2,3 +2,9 @@
 - [ ] Create diff sizes of images for the favicon
 - [X] Check duplicate emails right at service level
 - [ ] Validations for models in the backend
+- [ ] Rollback the user registration if home folder creation failed (later move to outback pattern - message queue if failed)
+- [X] Fix mongo init script
+- [ ] When the directory is created, current active directory should be the one which was selected - Even google drive does not do this.
+- [ ] Right Click on the directory for Delete and Edit. When we delete, the parent should be selected - Need to check google drive
+- [ ] Setup azure blob store
+- [ ] Connect with backend to store the file, upload metadata to 

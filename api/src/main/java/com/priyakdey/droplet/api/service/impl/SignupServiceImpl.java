@@ -4,9 +4,9 @@ import com.priyakdey.droplet.api.entity.Account;
 import com.priyakdey.droplet.api.exception.EmailExistsException;
 import com.priyakdey.droplet.api.repository.AccountRepository;
 import com.priyakdey.droplet.api.service.DirectoryService;
+import com.priyakdey.droplet.api.service.FileService;
 import com.priyakdey.droplet.api.service.SignupService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Priyak Dey
@@ -16,15 +16,16 @@ public class SignupServiceImpl implements SignupService {
 
     private final AccountRepository accountRepository;
     private final DirectoryService directoryService;
+    private final FileService fileService;
 
-    public SignupServiceImpl(AccountRepository accountRepository,
-                             DirectoryService directoryService) {
+    public SignupServiceImpl(AccountRepository accountRepository, DirectoryService directoryService,
+                             FileService fileService) {
         this.accountRepository = accountRepository;
         this.directoryService = directoryService;
+        this.fileService = fileService;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Long signup(String name, String email, String password) {
         if (accountRepository.existsByEmail(email)) {
             throw new EmailExistsException("An account with same email already exists");
@@ -35,6 +36,9 @@ public class SignupServiceImpl implements SignupService {
 
         // TODO: Do we need to send back the home directory id?
         directoryService.createHomeDir(id);
+
+        String containerName = "home-" + id;
+        fileService.createContainer(containerName);
 
         return id;
     }

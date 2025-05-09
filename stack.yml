@@ -28,6 +28,19 @@ services:
       - droplet_mongodata:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: droplet.blob.azurite
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    command: "azurite-blob --blobHost 0.0.0.0"
+    volumes:
+      - droplet_azurite:/data
+
 volumes:
   droplet_pgdata:
   droplet_mongodata:
+  droplet_azurite:
