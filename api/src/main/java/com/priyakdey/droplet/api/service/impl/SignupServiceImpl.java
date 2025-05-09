@@ -6,6 +6,7 @@ import com.priyakdey.droplet.api.repository.AccountRepository;
 import com.priyakdey.droplet.api.service.DirectoryService;
 import com.priyakdey.droplet.api.service.FileService;
 import com.priyakdey.droplet.api.service.SignupService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,11 +19,15 @@ public class SignupServiceImpl implements SignupService {
     private final DirectoryService directoryService;
     private final FileService fileService;
 
+    private final Long maxStorageInBytes;
+
     public SignupServiceImpl(AccountRepository accountRepository, DirectoryService directoryService,
-                             FileService fileService) {
+                             FileService fileService,
+                             @Value("${droplet.max.allowed.storage}") Long maxStorageInBytes) {
         this.accountRepository = accountRepository;
         this.directoryService = directoryService;
         this.fileService = fileService;
+        this.maxStorageInBytes = maxStorageInBytes;
     }
 
     @Override
@@ -30,7 +35,7 @@ public class SignupServiceImpl implements SignupService {
         if (accountRepository.existsByEmail(email)) {
             throw new EmailExistsException("An account with same email already exists");
         }
-        Account account = new Account(name, email, password);
+        Account account = new Account(name, email, password, maxStorageInBytes);
         account = accountRepository.save(account);
         long id = account.getId();
 

@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "droplet.max.allowed.storage",
+      "type": "java.lang.Long",
+      "description": "Defines the maximum allowed storage for users."
+    }
+  ]
+}

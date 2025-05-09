@@ -22,11 +22,13 @@ DROP TABLE IF EXISTS account;
 
 CREATE TABLE account
 (
-    id            BIGINT       NOT NULL,
-    name          VARCHAR(255) NOT NULL,
-    email         VARCHAR(255) NOT NULL UNIQUE,
-    password_hash text         NOT NULL,
-    created_at    TIMESTAMPTZ,
+    id                    BIGINT       NOT NULL,
+    name                  VARCHAR(255) NOT NULL,
+    email                 VARCHAR(255) NOT NULL UNIQUE,
+    password_hash         text         NOT NULL,
+    created_at            TIMESTAMPTZ,
+    used_storage_in_bytes BIGINT       NOT NULL,
+    max_storage_in_bytes  BIGINT       NOT NULL,
     PRIMARY KEY (id)
 );
 

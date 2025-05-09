@@ -34,14 +34,22 @@ public class Account implements Serializable {
     @Column
     private ZonedDateTime createdAt;
 
+    @Column
+    private Long usedStorageInBytes;
+
+    @Column
+    private Long maxStorageInBytes;
+
     public Account() {
     }
 
-    public Account(String name, String email, String passwordHash) {
+    public Account(String name, String email, String passwordHash, Long maxStorageInBytes) {
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
         this.createdAt = ZonedDateTime.now(Clock.systemUTC());
+        this.usedStorageInBytes = 0L;
+        this.maxStorageInBytes = maxStorageInBytes;
     }
 
     public Long getId() {
@@ -82,5 +90,21 @@ public class Account implements Serializable {
 
     public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getUsedStorageInBytes() {
+        return usedStorageInBytes;
+    }
+
+    public void setUsedStorageInBytes(Long usedStorageInBytes) {
+        this.usedStorageInBytes = usedStorageInBytes;
+    }
+
+    public Long getMaxStorageInBytes() {
+        return maxStorageInBytes;
+    }
+
+    public void setMaxStorageInBytes(Long maxStorageInBytes) {
+        this.maxStorageInBytes = maxStorageInBytes;
     }
 }
