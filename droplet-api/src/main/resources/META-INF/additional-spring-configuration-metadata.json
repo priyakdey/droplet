@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "instance_id",
+      "type": "java.lang.String",
+      "description": "instance_id defines the unique key for the instance of the application."
+    }
+  ]
+}
