@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  postgresdb:
+    image: postgres:17.4
+    container_name: droplet.db.postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - droplet_pgdata:/var/lib/postgresql/data
+      - ./scripts/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  mongodb:
+    image: mongo:8.0
+    container_name: droplet.db.mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - droplet_mongodata:/data/db
+      - ./scripts/mongodb-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: droplet.blob.azurite
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    command: "azurite-blob --blobHost 0.0.0.0"
+    volumes:
+      - droplet_azurite:/data
+
+volumes:
+  droplet_pgdata:
+  droplet_mongodata:
+  droplet_azurite:
