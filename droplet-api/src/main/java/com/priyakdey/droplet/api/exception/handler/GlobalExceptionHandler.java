@@ -30,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({EmailExistsException.class})
     public ResponseEntity<ErrorResponse> handleEmailExistsException(Exception ex) {
-        logger.warn(ex.getMessage());
+        logger.error(ex.getMessage());
         ErrorResponse response = new ErrorResponse(CONFLICT.value(), ex.getMessage());
         return ResponseEntity.status(CONFLICT).body(response);
     }
