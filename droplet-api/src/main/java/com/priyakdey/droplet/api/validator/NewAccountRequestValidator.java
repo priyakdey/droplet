@@ -91,7 +91,8 @@ public interface NewAccountRequestValidator
 
             if (!hasUpperCase || !hasLowerCase || !hasDigits || !hasSpecialChar) {
                 return new NewAccountValidationResult(INVALID_PASSWORD,
-                        "Password must contain at-least 1 uppercase, 1 lowercase, 1 digit and 1 special char - " + ALLOWED_SPECIAL_CHARS);
+                        "Password must uppercase, lowercase, digit and special character: "
+                                + ALLOWED_SPECIAL_CHARS);
             }
 
             return SUCCESS;
