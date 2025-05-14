@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @author Priyak Dey
  */
@@ -35,11 +37,16 @@ public class InodeServiceImpl implements InodeService {
     }
 
     @Override
+    public Optional<Directory> getHomeDir(Integer ownerId) {
+        return directoryRepository.findByOwnerId(ownerId);
+    }
+
+    @Override
     @Transactional
     public void deleteById(String id) {
         if (!ObjectId.isValid(id)) {
             logger.warn("Received invalid hex id: {}", id);
-            throw new ServerException("Something went wrong. Try again later or contact us.");
+            throw new ServerException();
         }
 
         deleteById(new ObjectId(id));

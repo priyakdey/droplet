@@ -2,6 +2,8 @@ package com.priyakdey.droplet.api.validator;
 
 import com.priyakdey.droplet.api.model.request.v1.SignupRequest;
 
+import java.time.ZoneId;
+import java.time.zone.ZoneRulesException;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -34,6 +36,7 @@ public interface SignupRequestValidator
         INVALID_NAME,
         INVALID_EMAIL,
         INVALID_PASSWORD,
+        INVALID_TIMEZONE,
         SUCCESS
     }
 
@@ -93,6 +96,19 @@ public interface SignupRequestValidator
                 return new SignupValidationResult(INVALID_PASSWORD,
                         "Password must uppercase, lowercase, digit and special character: "
                                 + ALLOWED_SPECIAL_CHARS);
+            }
+
+            return SUCCESS;
+        };
+    }
+
+    static SignupRequestValidator isValidTimezone() {
+        return req -> {
+            String timezone = req.getTimeZone();
+            try {
+                ZoneId.of(timezone);
+            } catch (ZoneRulesException ex) {
+                return new SignupValidationResult(INVALID_TIMEZONE, timezone + " is not a valid timezone");
             }
 
             return SUCCESS;

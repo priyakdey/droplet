@@ -42,7 +42,7 @@ public class HS256TokenServiceImpl implements TokenService {
                     .sign(Algorithm.HMAC256("secret"));
         } catch (IllegalArgumentException | JWTCreationException e) {
             logger.error("Failed to generate the token:", e);
-            throw new ServerException("Something went wrong. Try again later or contact us.");
+            throw new ServerException();
         }
     }
 }

@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @author Priyak Dey
  */
@@ -28,6 +30,11 @@ public class ProfileServiceImpl implements ProfileService {
         String containerName = "home-" + account.getId();
         Profile profile = new Profile(name, timeZone, containerName, account);
         return profileRepository.save(profile);
+    }
+
+    @Override
+    public Optional<Profile> getProfile(Account account) {
+        return profileRepository.findByAccount(account);
     }
 
     @Override

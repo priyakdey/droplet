@@ -1,6 +1,7 @@
 package com.priyakdey.droplet.api.exception.handler;
 
 import com.priyakdey.droplet.api.exception.EmailExistsException;
+import com.priyakdey.droplet.api.exception.InvalidCredentialsException;
 import com.priyakdey.droplet.api.exception.InvalidInputException;
 import com.priyakdey.droplet.api.exception.ServerException;
 import com.priyakdey.droplet.api.model.response.v1.ErrorResponse;
@@ -33,6 +34,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.error(ex.getMessage());
         ErrorResponse response = new ErrorResponse(CONFLICT.value(), ex.getMessage());
         return ResponseEntity.status(CONFLICT).body(response);
+    }
+
+    @ExceptionHandler({InvalidCredentialsException.class})
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(Exception ex) {
+        logger.error(ex.getMessage());
+        ErrorResponse response = new ErrorResponse(UNAUTHORIZED.value(), ex.getMessage());
+        return ResponseEntity.status(UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler({ServerException.class, Exception.class})

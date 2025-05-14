@@ -32,7 +32,7 @@ public class BlobServiceImpl implements BlobService {
         int statusCode = response.getStatusCode();
         if (statusCode != 201) {
             logger.error("Error creating blob container. Got response code: {}", statusCode);
-            throw new ServerException("Something went wrong. Try again later or contact us.");
+            throw new ServerException();
         }
 
     }

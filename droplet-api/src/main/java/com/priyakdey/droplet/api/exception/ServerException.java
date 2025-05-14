@@ -9,7 +9,7 @@ public class ServerException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -3027606466061705758L;
 
-    public ServerException(String message) {
-        super(message);
+    public ServerException() {
+        super("Something went wrong. Try again later or contact us.");
     }
 }

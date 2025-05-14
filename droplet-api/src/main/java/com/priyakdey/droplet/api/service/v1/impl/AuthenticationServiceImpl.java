@@ -4,15 +4,20 @@ import com.priyakdey.droplet.api.entity.v1.Account;
 import com.priyakdey.droplet.api.entity.v1.Directory;
 import com.priyakdey.droplet.api.entity.v1.Profile;
 import com.priyakdey.droplet.api.exception.EmailExistsException;
+import com.priyakdey.droplet.api.exception.InvalidCredentialsException;
 import com.priyakdey.droplet.api.exception.ServerException;
 import com.priyakdey.droplet.api.model.dto.v1.ProfileMetadataDto;
 import com.priyakdey.droplet.api.model.dto.v1.SignupDto;
-import com.priyakdey.droplet.api.model.response.v1.SignupResponse;
+import com.priyakdey.droplet.api.model.response.v1.AuthResponse;
+import com.priyakdey.droplet.api.security.core.SecureCharSequence;
 import com.priyakdey.droplet.api.service.v1.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
@@ -30,21 +35,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final InodeService inodeService;
     private final BlobService blobService;
     private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthenticationServiceImpl(AccountService accountService, ProfileService profileService,
                                      InodeService inodeService, BlobService blobService,
-                                     TokenService tokenService) {
+                                     TokenService tokenService, PasswordEncoder passwordEncoder) {
         this.accountService = accountService;
         this.profileService = profileService;
         this.inodeService = inodeService;
         this.blobService = blobService;
         this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     @Override
     @Transactional(propagation = REQUIRED, isolation = READ_COMMITTED)
-    public SignupResponse signup(SignupDto signupDto) {
+    public AuthResponse signup(SignupDto signupDto) {
         String email = signupDto.email();
         if (accountService.accountExists(email)) {
             throw new EmailExistsException("This email is already registered with us.");
@@ -83,10 +90,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             ProfileMetadataDto profileMetadataDto = new ProfileMetadataDto(account.getId(),
                     profile.getId(), homeDir.getId().toHexString(), name, timeZone);
 
-            SignupResponse signupResponse = new SignupResponse();
-            signupResponse.setProfile(profileMetadataDto);
-            signupResponse.setToken(token);
-            return signupResponse;
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.setProfile(profileMetadataDto);
+            authResponse.setToken(token);
+            return authResponse;
         } catch (Exception e) {
             logger.error("Error creating the account: ", e);
 
@@ -95,9 +102,48 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (profileCreated) profileService.deleteById(profile.getId());
             if (accountCreated) accountService.deleteById(account.getId());
 
-            throw new ServerException("Something went wrong. Try again later or contact us.");
+            throw new ServerException();
         }
 
+    }
+
+    @Override
+    public AuthResponse authenticate(String email, SecureCharSequence rawPassword) {
+        Optional<Account> optional = accountService.getByEmail(email);
+        if (optional.isEmpty()) {
+            throw new InvalidCredentialsException("Invalid credentials.");
+        }
+
+        Account account = optional.get();
+        if (!passwordEncoder.matches(rawPassword, account.getPasswordHash())) {
+            throw new InvalidCredentialsException("Invalid credentials");
+        }
+
+        Integer accountId = account.getId();
+
+        Profile profile = profileService.getProfile(account).orElseThrow(() -> {
+            logger.error("Could not find profile for account id: {}", accountId);
+            return new ServerException();
+        });
+
+        Directory homeDir = inodeService.getHomeDir(accountId).orElseThrow(() -> {
+            logger.error("Could not find home directory for account id: {}", accountId);
+            return new ServerException();
+        });
+
+        Integer profileId = profile.getId();
+        String name = profile.getName();
+        String preferredTz = profile.getPreferredTz();
+
+        String token = tokenService.generate(accountId, name);
+
+        ProfileMetadataDto profileMetadataDto = new ProfileMetadataDto(accountId,
+                profileId, homeDir.getId().toHexString(), name, preferredTz);
+
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setToken(token);
+        authResponse.setProfile(profileMetadataDto);
+        return authResponse;
     }
 
 }

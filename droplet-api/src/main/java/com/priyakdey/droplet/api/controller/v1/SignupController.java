@@ -3,7 +3,7 @@ package com.priyakdey.droplet.api.controller.v1;
 import com.priyakdey.droplet.api.exception.InvalidInputException;
 import com.priyakdey.droplet.api.model.dto.v1.SignupDto;
 import com.priyakdey.droplet.api.model.request.v1.SignupRequest;
-import com.priyakdey.droplet.api.model.response.v1.SignupResponse;
+import com.priyakdey.droplet.api.model.response.v1.AuthResponse;
 import com.priyakdey.droplet.api.security.core.SecureCharSequence;
 import com.priyakdey.droplet.api.service.v1.AuthenticationService;
 import com.priyakdey.droplet.api.validator.SignupRequestValidator;
@@ -37,10 +37,11 @@ public class SignupController {
     }
 
     @PostMapping
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<AuthResponse> signup(@RequestBody SignupRequest signupRequest) {
         SignupValidationResult result = SignupRequestValidator.isValidName()
                 .and(SignupRequestValidator.isValidEmail())
                 .and(SignupRequestValidator.isValidPassword())
+                .and(SignupRequestValidator.isValidTimezone())
                 .apply(signupRequest);
 
         if (result.type() != SignupRequestValidator.SignupValidationResultType.SUCCESS) {
@@ -57,9 +58,9 @@ public class SignupController {
 
 
         SignupDto dto = SignupDto.from(name, email, passwordHash, timeZone);
-        SignupResponse signupResponse = authenticationService.signup(dto);
-        URI location = URI.create("/v1/profiles/" + signupResponse.getProfile().profileId());
-        return ResponseEntity.created(location).body(signupResponse);
+        AuthResponse authResponse = authenticationService.signup(dto);
+        URI location = URI.create("/v1/profiles/" + authResponse.getProfile().profileId());
+        return ResponseEntity.created(location).body(authResponse);
     }
 
 }

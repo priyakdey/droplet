@@ -11,9 +11,18 @@ conversions of `char[]` to a `byte[]` without using String to make sure its secu
 ## TODO
 
 - [ ] Setup test containers for testing
-- [ ] User signup
-    - [ ] Save the account to db
-    - [ ] Create the home folder entry in the mongo
-    - [ ] Create a container for the user
-    - [ ] Rollback if error at any step
-    - [ ] Generate JWT Token for auth
+- [X] User signup
+    - [X] Save the account to db
+    - [X] Create the home folder entry in the mongo
+    - [X] Create a container for the user
+    - [X] Rollback if error at any step
+    - [X] Generate JWT Token for auth
+- [ ] Tracing
+    - [X] Support Tracing
+    - [ ] Export data to some collector
+    - [ ] Check how to start generating the trace ids from the nginx
+    - [X] Add trace id in the response.
+- [ ] Login Flow
+    - [ ] User can login with email/password
+    - [ ] Generate a token for user login
+    - [ ] Return back user metadata once login (similar to signup)

@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * @author Priyak Dey
  */
-public class SignupResponse implements Serializable {
+public class AuthResponse implements Serializable {
     @Serial
     private static final long serialVersionUID = -5271059411625841031L;
 

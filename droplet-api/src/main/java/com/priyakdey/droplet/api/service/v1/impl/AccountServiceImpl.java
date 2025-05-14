@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @author Priyak Dey
  */
@@ -32,6 +34,11 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void deleteById(Integer id) {
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Account> getByEmail(String email) {
+        return accountRepository.findByEmail(email);
     }
 
     @Override
