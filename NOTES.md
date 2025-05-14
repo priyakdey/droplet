@@ -22,7 +22,12 @@ conversions of `char[]` to a `byte[]` without using String to make sure its secu
     - [ ] Export data to some collector
     - [ ] Check how to start generating the trace ids from the nginx
     - [X] Add trace id in the response.
-- [ ] Login Flow
-    - [ ] User can login with email/password
-    - [ ] Generate a token for user login
-    - [ ] Return back user metadata once login (similar to signup)
+- [X] Login Flow
+    - [X] User can login with email/password
+    - [X] Generate a token for user login
+    - [X] Return back user metadata once login (similar to signup)
+- [ ] Directories:
+    - [ ] Send directory hierrachy for the owner id
+    - [ ] Create a directory
+    - [ ] Put a hard coded check on number of folders at each level.
+    - [ ] Put a hard coded check on folder tree depth.
