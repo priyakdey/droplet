@@ -35,6 +35,7 @@ CREATE SEQUENCE seq_account_id
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE seq_account_id TO droplet_user;
 
 CREATE UNIQUE INDEX idx_account_email ON account (email);
 
@@ -63,3 +64,4 @@ CREATE SEQUENCE seq_profile_id
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE seq_profile_id TO droplet_user;

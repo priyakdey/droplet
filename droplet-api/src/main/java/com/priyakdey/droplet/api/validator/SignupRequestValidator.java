@@ -1,19 +1,19 @@
 package com.priyakdey.droplet.api.validator;
 
-import com.priyakdey.droplet.api.model.request.v1.NewAccountRequest;
+import com.priyakdey.droplet.api.model.request.v1.SignupRequest;
 
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import static com.priyakdey.droplet.api.validator.NewAccountRequestValidator.NewAccountValidationResult;
-import static com.priyakdey.droplet.api.validator.NewAccountRequestValidator.NewAccountValidationResultType.*;
+import static com.priyakdey.droplet.api.validator.SignupRequestValidator.SignupValidationResult;
+import static com.priyakdey.droplet.api.validator.SignupRequestValidator.SignupValidationResultType.*;
 
 /**
  * @author Priyak Dey
  */
-public interface NewAccountRequestValidator
-        extends Function<NewAccountRequest, NewAccountValidationResult> {
+public interface SignupRequestValidator
+        extends Function<SignupRequest, SignupValidationResult> {
 
     // https://github.com/colinhacks/zod/blob/e62341b1aaf720709ee5f31785db25d5c0491659/src/types.ts#L648
     Pattern EMAIL_PATTERN_PATTERN =
@@ -27,53 +27,53 @@ public interface NewAccountRequestValidator
     );
 
 
-    NewAccountValidationResult SUCCESS =
-            new NewAccountValidationResult(NewAccountValidationResultType.SUCCESS, null);
+    SignupValidationResult SUCCESS =
+            new SignupValidationResult(SignupValidationResultType.SUCCESS, null);
 
-    enum NewAccountValidationResultType {
+    enum SignupValidationResultType {
         INVALID_NAME,
         INVALID_EMAIL,
         INVALID_PASSWORD,
         SUCCESS
     }
 
-    record NewAccountValidationResult(NewAccountValidationResultType type, String message) {
+    record SignupValidationResult(SignupValidationResultType type, String message) {
     }
 
-    static NewAccountRequestValidator isValidName() {
+    static SignupRequestValidator isValidName() {
         return req -> {
             String name = req.getName();
             if (name == null || name.isBlank()) {
-                return new NewAccountValidationResult(INVALID_NAME, "Name cannot be blank");
+                return new SignupValidationResult(INVALID_NAME, "Name cannot be blank");
             } else if (name.length() > 255) {
-                return new NewAccountValidationResult(INVALID_NAME, "Name is too long");
+                return new SignupValidationResult(INVALID_NAME, "Name is too long");
             }
 
             return SUCCESS;
         };
     }
 
-    static NewAccountRequestValidator isValidEmail() {
+    static SignupRequestValidator isValidEmail() {
         return req -> {
             String email = req.getEmail();
             if (email == null || email.isBlank()) {
-                return new NewAccountValidationResult(INVALID_EMAIL, "Email cannot be blank");
+                return new SignupValidationResult(INVALID_EMAIL, "Email cannot be blank");
             } else if (email.length() > 254) {
                 // See: https://datatracker.ietf.org/doc/html/rfc5321#section-4.5.3.1
-                return new NewAccountValidationResult(INVALID_EMAIL, "Email is too long");
+                return new SignupValidationResult(INVALID_EMAIL, "Email is too long");
             } else if (!EMAIL_PATTERN_PATTERN.matcher(email).matches()) {
-                return new NewAccountValidationResult(INVALID_EMAIL, "Invalid email format");
+                return new SignupValidationResult(INVALID_EMAIL, "Invalid email format");
             }
 
             return SUCCESS;
         };
     }
 
-    static NewAccountRequestValidator isValidPassword() {
+    static SignupRequestValidator isValidPassword() {
         return req -> {
             char[] data = req.getPassword().getData();
             if (data == null || data.length < 8 || data.length > 20) {
-                return new NewAccountValidationResult(INVALID_PASSWORD,
+                return new SignupValidationResult(INVALID_PASSWORD,
                         "Password must be between 8 and 20 chars long");
             }
 
@@ -90,7 +90,7 @@ public interface NewAccountRequestValidator
             }
 
             if (!hasUpperCase || !hasLowerCase || !hasDigits || !hasSpecialChar) {
-                return new NewAccountValidationResult(INVALID_PASSWORD,
+                return new SignupValidationResult(INVALID_PASSWORD,
                         "Password must uppercase, lowercase, digit and special character: "
                                 + ALLOWED_SPECIAL_CHARS);
             }
@@ -99,10 +99,10 @@ public interface NewAccountRequestValidator
         };
     }
 
-    default NewAccountRequestValidator and(NewAccountRequestValidator next) {
+    default SignupRequestValidator and(SignupRequestValidator next) {
         return req -> {
-            NewAccountValidationResult result = this.apply(req);
-            if (result.type != NewAccountValidationResultType.SUCCESS) {
+            SignupValidationResult result = this.apply(req);
+            if (result.type != SignupValidationResultType.SUCCESS) {
                 return result;
             }
 

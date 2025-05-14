@@ -1,6 +1,5 @@
 package com.priyakdey.droplet.api.entity.v1;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;

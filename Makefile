@@ -6,5 +6,5 @@ teardown:
 	docker-compose -f stack.yml down -v
 
 setup:
-	docker-compose -f stack.yml up -d
+	docker-compose -f stack.yml up --build -d
 

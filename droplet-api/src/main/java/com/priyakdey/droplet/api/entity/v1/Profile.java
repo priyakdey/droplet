@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Clock;
 import java.time.ZonedDateTime;
 
 /**
@@ -17,7 +18,7 @@ public class Profile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_profile_id")
-    @SequenceGenerator(name = "seq_profile_id", sequenceName = "seq_profile_id")
+    @SequenceGenerator(name = "seq_profile_id", sequenceName = "seq_profile_id", allocationSize = 1)
     private Integer id;
 
     @Column
@@ -39,7 +40,18 @@ public class Profile implements Serializable {
     @JoinColumn(name = "account_id", referencedColumnName = "id", unique = true)
     private Account account;
 
+    public Profile() {
+    }
 
+    public Profile(String name, String preferredTz, String containerName, Account account) {
+        this.name = name;
+        this.preferredTz = preferredTz;
+        this.containerName = containerName;
+        ZonedDateTime now = ZonedDateTime.now(Clock.systemUTC());
+        this.createdAt = now;
+        this.updatedAt = now;
+        this.account = account;
+    }
 
     public Integer getId() {
         return id;

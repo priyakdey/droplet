@@ -26,7 +26,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - droplet_mongodata:/data/db
-      - ./scripts/mongodb-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite

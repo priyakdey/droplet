@@ -1,16 +1,21 @@
 package com.priyakdey.droplet.api.controller.v1;
 
 import com.priyakdey.droplet.api.exception.InvalidInputException;
-import com.priyakdey.droplet.api.model.dto.v1.AccountSignupDto;
-import com.priyakdey.droplet.api.model.request.v1.NewAccountRequest;
+import com.priyakdey.droplet.api.model.dto.v1.SignupDto;
+import com.priyakdey.droplet.api.model.request.v1.SignupRequest;
+import com.priyakdey.droplet.api.model.response.v1.SignupResponse;
 import com.priyakdey.droplet.api.security.core.SecureCharSequence;
-import com.priyakdey.droplet.api.validator.NewAccountRequestValidator;
-import com.priyakdey.droplet.api.validator.NewAccountRequestValidator.NewAccountValidationResult;
+import com.priyakdey.droplet.api.service.v1.AuthenticationService;
+import com.priyakdey.droplet.api.validator.SignupRequestValidator;
+import com.priyakdey.droplet.api.validator.SignupRequestValidator.SignupValidationResult;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -23,32 +28,38 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 public class SignupController {
 
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationService authenticationService;
 
-    public SignupController(PasswordEncoder passwordEncoder) {
+    public SignupController(PasswordEncoder passwordEncoder,
+                            AuthenticationService authenticationService) {
         this.passwordEncoder = passwordEncoder;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping
-    public String signup(@RequestBody NewAccountRequest newAccountRequest) {
-        NewAccountValidationResult result = NewAccountRequestValidator.isValidName()
-                .and(NewAccountRequestValidator.isValidEmail())
-                .and(NewAccountRequestValidator.isValidPassword())
-                .apply(newAccountRequest);
+    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest signupRequest) {
+        SignupValidationResult result = SignupRequestValidator.isValidName()
+                .and(SignupRequestValidator.isValidEmail())
+                .and(SignupRequestValidator.isValidPassword())
+                .apply(signupRequest);
 
-        if (result.type() != NewAccountRequestValidator.NewAccountValidationResultType.SUCCESS) {
+        if (result.type() != SignupRequestValidator.SignupValidationResultType.SUCCESS) {
             throw new InvalidInputException(result.message());
         }
 
-        String name = newAccountRequest.getName();
-        String email = newAccountRequest.getEmail();
-        SecureCharSequence password = newAccountRequest.getPassword();
+        String name = signupRequest.getName();
+        String email = signupRequest.getEmail();
+        String timeZone = signupRequest.getTimeZone();
+        SecureCharSequence password = signupRequest.getPassword();
 
         String passwordHash = passwordEncoder.encode(password);
         password.clear();
 
-        AccountSignupDto dto = AccountSignupDto.from(name, email, passwordHash);
 
-        return "Signup successful!";
+        SignupDto dto = SignupDto.from(name, email, passwordHash, timeZone);
+        SignupResponse signupResponse = authenticationService.signup(dto);
+        URI location = URI.create("/v1/profiles/" + signupResponse.getProfile().profileId());
+        return ResponseEntity.created(location).body(signupResponse);
     }
 
 }

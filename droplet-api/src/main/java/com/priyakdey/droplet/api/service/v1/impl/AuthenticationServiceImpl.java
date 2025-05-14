@@ -1,0 +1,103 @@
+package com.priyakdey.droplet.api.service.v1.impl;
+
+import com.priyakdey.droplet.api.entity.v1.Account;
+import com.priyakdey.droplet.api.entity.v1.Directory;
+import com.priyakdey.droplet.api.entity.v1.Profile;
+import com.priyakdey.droplet.api.exception.EmailExistsException;
+import com.priyakdey.droplet.api.exception.ServerException;
+import com.priyakdey.droplet.api.model.dto.v1.ProfileMetadataDto;
+import com.priyakdey.droplet.api.model.dto.v1.SignupDto;
+import com.priyakdey.droplet.api.model.response.v1.SignupResponse;
+import com.priyakdey.droplet.api.service.v1.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
+
+/**
+ * @author Priyak Dey
+ */
+@Service
+public class AuthenticationServiceImpl implements AuthenticationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+
+    private final AccountService accountService;
+    private final ProfileService profileService;
+    private final InodeService inodeService;
+    private final BlobService blobService;
+    private final TokenService tokenService;
+
+    public AuthenticationServiceImpl(AccountService accountService, ProfileService profileService,
+                                     InodeService inodeService, BlobService blobService,
+                                     TokenService tokenService) {
+        this.accountService = accountService;
+        this.profileService = profileService;
+        this.inodeService = inodeService;
+        this.blobService = blobService;
+        this.tokenService = tokenService;
+    }
+
+
+    @Override
+    @Transactional(propagation = REQUIRED, isolation = READ_COMMITTED)
+    public SignupResponse signup(SignupDto signupDto) {
+        String email = signupDto.email();
+        if (accountService.accountExists(email)) {
+            throw new EmailExistsException("This email is already registered with us.");
+        }
+
+        boolean accountCreated = false;
+        boolean profileCreated = false;
+        boolean homeDirCreated = false;
+        boolean blobContainerCreated = false;
+
+        String name = signupDto.name();
+        String password = signupDto.password();
+        String timeZone = signupDto.timeZone();
+
+        Account account = null;
+        Profile profile = null;
+        Directory homeDir = null;
+        String containerName = null;
+
+        try {
+            account = accountService.create(email, password);
+            accountCreated = true;
+
+            profile = profileService.create(name, timeZone, account);
+            profileCreated = true;
+
+            homeDir = inodeService.createHomeDir(account.getId());
+            homeDirCreated = true;
+
+            containerName = "home-" + account.getId();
+            blobService.createContainer(containerName);
+            blobContainerCreated = true;
+
+            String token = tokenService.generate(account.getId(), name);
+
+            ProfileMetadataDto profileMetadataDto = new ProfileMetadataDto(account.getId(),
+                    profile.getId(), homeDir.getId().toHexString(), name, timeZone);
+
+            SignupResponse signupResponse = new SignupResponse();
+            signupResponse.setProfile(profileMetadataDto);
+            signupResponse.setToken(token);
+            return signupResponse;
+        } catch (Exception e) {
+            logger.error("Error creating the account: ", e);
+
+            if (blobContainerCreated) blobService.deleteContainer(containerName);
+            if (homeDirCreated) inodeService.deleteById(homeDir.getId());
+            if (profileCreated) profileService.deleteById(profile.getId());
+            if (accountCreated) accountService.deleteById(account.getId());
+
+            throw new ServerException("Something went wrong. Try again later or contact us.");
+        }
+
+    }
+
+}

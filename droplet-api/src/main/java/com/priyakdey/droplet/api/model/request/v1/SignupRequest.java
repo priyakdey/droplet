@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * @author Priyak Dey
  */
-public class NewAccountRequest implements Serializable {
+public class SignupRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = -1344679194305946621L;
 
@@ -17,6 +17,8 @@ public class NewAccountRequest implements Serializable {
     private String email;
 
     private SecureCharSequence password;
+
+    private String timeZone;
 
     public String getName() {
         return name;
@@ -42,4 +44,11 @@ public class NewAccountRequest implements Serializable {
         this.password = password;
     }
 
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 }
