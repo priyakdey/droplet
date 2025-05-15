@@ -1,0 +1,11 @@
+.App-footer {
+  margin-top: auto;
+  height: var(--footer-container-height);
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

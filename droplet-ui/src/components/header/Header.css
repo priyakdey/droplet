@@ -1,0 +1,13 @@
+.App-header {
+  height: var(--header-container-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 70px;
+  padding-right: 200px;
+  margin-left: 20px;
+}
+
+.App-logo {
+  padding-left: 200px;
+}
