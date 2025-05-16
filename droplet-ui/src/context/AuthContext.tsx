@@ -25,6 +25,7 @@ function AuthProvider({ children }: AuthProviderPropsType) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+    // TODO: force logout if not present
     if (storedToken) {
       setToken(storedToken);
     }

@@ -31,3 +31,8 @@ conversions of `char[]` to a `byte[]` without using String to make sure its secu
     - [ ] Create a directory
     - [ ] Put a hard coded check on number of folders at each level.
     - [ ] Put a hard coded check on folder tree depth.
+- [ ] Edit Profile
+    - [ ] Make sure edit profile name is not selected
+    - [ ] type ahead, fuzzy search for timezone
+    - [ ] cache the timezones, would be great to actually show places with offset.
+

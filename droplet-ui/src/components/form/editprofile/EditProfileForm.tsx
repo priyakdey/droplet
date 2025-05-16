@@ -15,10 +15,14 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select.tsx";
+import useAuth from "@/hooks/useAuth.ts";
 import useProfile from "@/hooks/useProfile.ts";
+import { getAllAvailableTimezones } from "@/service/timezoneService.ts";
 import { nameSchema, timezoneSchema } from "@/types/formSchema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const editProfileSchema = z.object({
@@ -31,7 +35,19 @@ interface EditProfileFormPropsType {
 }
 
 function EditProfileForm({ closeSheet }: EditProfileFormPropsType) {
+  const [ timezones, setTimeZones ] = useState<string[]>([]);
   const { name, timezone } = useProfile();
+  const { token } = useAuth();
+
+  useEffect(() => {
+    getAllAvailableTimezones(token!)
+      .then(data => setTimeZones(data))
+      .catch(error => {
+        const description = typeof error.cause === "string"
+          ? error.cause : "An unknown error occurred";
+        toast.error(error.message, { description: description });
+      });
+  }, []);
 
   const form = useForm<z.infer<typeof editProfileSchema>>({
     resolver: zodResolver(editProfileSchema),
@@ -79,16 +95,13 @@ function EditProfileForm({ closeSheet }: EditProfileFormPropsType) {
                                <SelectValue placeholder="Select Timezone" />
                              </SelectTrigger>
                              <SelectContent>
-                               <SelectItem value="UTC">UTC</SelectItem>
-                               <SelectItem value="Asia/Kolkata">
-                                 Asia/Kolkata
-                               </SelectItem>
-                               <SelectItem value="America/New_York">
-                                 America/New_York
-                               </SelectItem>
-                               <SelectItem value="Europe/London">
-                                 Europe/London
-                               </SelectItem>
+                               {
+                                 timezones.map((tz) => (
+                                   <SelectItem key={tz} value={tz}>
+                                     {tz}
+                                   </SelectItem>
+                                 ))
+                               }
                              </SelectContent>
                            </Select>
                          </div>

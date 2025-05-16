@@ -1,3 +1,8 @@
+export interface ErrorResponse {
+  statusCode: number;
+  message: string;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -16,7 +21,4 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface ErrorResponse {
-  statusCode: number;
-  message: string;
-}
+export type AvailableTimezonesResponse = string[];

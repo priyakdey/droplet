@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 interface ProfileContextType {
   accountId: number | null;
@@ -25,6 +25,22 @@ function ProfileProvider({ children }: ProfileProviderPropsType) {
   const [ name, setName ] = useState<string | null>(null);
   const [ timezone, setTimezone ] = useState<string | null>(null);
 
+  useEffect(() => {
+    const accountId = Number(localStorage.getItem("accountId"));
+    const profileId = Number(localStorage.getItem("profileId"));
+    const homeDirId = localStorage.getItem("homeDirId");
+    const name = localStorage.getItem("name");
+    const timezone = localStorage.getItem("timezone");
+    // TODO: force logout if these details not present
+    if (accountId) {
+      setAccountId(accountId);
+      setProfileId(profileId);
+      setHomeDirId(homeDirId);
+      setName(name);
+      setTimezone(timezone);
+    }
+  }, []);
+
   const setProfileDetails = (accountId: number, profileId: number,
                              homeDirId: string, name: string, timezone: string) => {
     setAccountId(accountId);
@@ -32,6 +48,11 @@ function ProfileProvider({ children }: ProfileProviderPropsType) {
     setHomeDirId(homeDirId);
     setName(name);
     setTimezone(timezone);
+    localStorage.setItem("accountId", accountId.toString());
+    localStorage.setItem("profileId", profileId.toString());
+    localStorage.setItem("homeDirId", homeDirId);
+    localStorage.setItem("name", name);
+    localStorage.setItem("timezone", timezone);
   };
 
   const updateProfileDetails = (name: string, timezone: string) => {

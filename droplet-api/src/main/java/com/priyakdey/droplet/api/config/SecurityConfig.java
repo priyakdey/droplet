@@ -1,6 +1,8 @@
 package com.priyakdey.droplet.api.config;
 
+import com.priyakdey.droplet.api.config.filter.AuthenticationFilter;
 import com.priyakdey.droplet.api.security.hasher.SecureBCryptPasswordEncoder;
+import com.priyakdey.droplet.api.service.v1.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.security.SecureRandom;
 
@@ -24,7 +27,8 @@ import static org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.B
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AuthenticationFilter authenticationFilter) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
@@ -33,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/v1/login").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
@@ -48,6 +53,11 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
             throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationFilter authenticationFilter(TokenService tokenService) {
+        return new AuthenticationFilter(tokenService);
     }
 
 }
