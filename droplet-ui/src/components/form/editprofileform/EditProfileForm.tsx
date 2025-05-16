@@ -54,7 +54,7 @@ function EditProfileForm({ closeSheet }: EditProfileFormPropsType) {
           ? error.cause : "An unknown error occurred";
         toast.error(error.message, { description: description });
       });
-  }, [ token, isLoaded ]);
+  }, []);
 
   const form = useForm<z.infer<typeof editProfileSchema>>({
     resolver: zodResolver(editProfileSchema),

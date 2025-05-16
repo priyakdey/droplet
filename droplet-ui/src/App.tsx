@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/home/*" element={
           <ProtectedRoute>
-            <HomePage />
+              <HomePage />
           </ProtectedRoute>
         }></Route>
       </Routes>

@@ -58,7 +58,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(accountId, null, Set.of());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
-        } catch (JWTVerificationException | NumberFormatException ex) {
+        } catch (Exception ex) {
             log.error("Could not parse and verify the token: ", ex);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }

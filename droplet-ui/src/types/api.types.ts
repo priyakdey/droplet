@@ -22,3 +22,15 @@ export interface AuthResponse {
 }
 
 export type AvailableTimezonesResponse = string[];
+
+export interface DirectoryDto {
+  id: string;
+  name: string;
+  parentId?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AllDirectoriesResponse {
+  directories: DirectoryDto[];
+}

@@ -28,7 +28,7 @@ public class DirectoryController {
     }
 
     @GetMapping
-    public ResponseEntity<AllDirectoriesResponse> getAllDirectories(Principal principal) {
+    public ResponseEntity<AllDirectoriesResponse> getAllDirectories(Principal principal) throws InterruptedException {
         int ownerId = Integer.parseInt(principal.getName());
         List<DirectoryDto> allDirectories = inodeService.getAllDirectories(ownerId);
         AllDirectoriesResponse response = new AllDirectoriesResponse();

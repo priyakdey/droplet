@@ -27,6 +27,13 @@
   box-shadow: 0 0 0 1px var(--accent);
 }
 
+.auth-form input::selection {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent);
+  background-color: var(--color-sky-800);
+}
+
 .auth-form button[type="submit"] {
   background-color: var(--accent);
   color: var(--accent-foreground);

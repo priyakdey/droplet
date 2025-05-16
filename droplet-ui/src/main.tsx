@@ -1,4 +1,5 @@
 import AuthProvider from "@/context/AuthContext.tsx";
+import ExplorerProvider from "@/context/ExplorerContext.tsx";
 import ProfileProvider from "@/context/ProfileContext.tsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -11,9 +12,11 @@ createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <AuthProvider>
       <ProfileProvider>
-        <StrictMode>
-          <App />
-        </StrictMode>
+        <ExplorerProvider>
+          <StrictMode>
+            <App />
+          </StrictMode>
+        </ExplorerProvider>
       </ProfileProvider>
     </AuthProvider>
   </BrowserRouter>
