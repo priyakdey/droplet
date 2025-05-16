@@ -7,9 +7,12 @@ import {
   FormMessage
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import useAuth from "@/hooks/useAuth.ts";
+import { authenticate } from "@/service/authService.ts";
 import { emailSchema, passwordSchema } from "@/types/formSchema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import "./AuthForm.css";
 
@@ -28,8 +31,18 @@ function LoginForm() {
     }
   });
 
+  const { login } = useAuth();
+
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+    authenticate(values)
+      .then((data) => {
+        login(data.token);
+      })
+      .catch((error: Error) => {
+        const description = typeof error.cause === "string"
+          ? error.cause : "An unknown error occurred";
+        toast.error(error.message, { description: description });
+      });
   }
 
   return (

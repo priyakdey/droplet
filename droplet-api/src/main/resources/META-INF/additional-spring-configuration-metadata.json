@@ -4,6 +4,16 @@
       "name": "instance_id",
       "type": "java.lang.String",
       "description": "instance_id defines the unique key for the instance of the application."
+    },
+    {
+      "name": "web.cors.allowed-origins",
+      "type": "java.lang.String",
+      "description": "web.cors.allowed-origins defines the list of comma separated origins allowed."
+    },
+    {
+      "name": "web.cors.allowed-methods",
+      "type": "java.lang.String",
+      "description": "web.cors.allowed-origins defines the list of comma separated origins methods."
     }
   ]
 }
