@@ -1,6 +1,6 @@
 import LoginForm from "@/components/form/authform/LoginForm.tsx";
 import SignupForm from "@/components/form/authform/SignupForm.tsx";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.tsx";
 import AppLayout from "@/layout/AppLayout.tsx";
 import { useState } from "react";
 import "./WelcomePage.css";

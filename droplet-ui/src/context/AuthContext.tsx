@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   token: string | null;
@@ -20,6 +21,8 @@ function AuthProvider({ children }: AuthProviderPropsType) {
   const [ token, setToken ] = useState<string | null>(null);
   const [ isLoading, setIsLoading ] = useState<boolean>(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -36,6 +39,7 @@ function AuthProvider({ children }: AuthProviderPropsType) {
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");
+    navigate("/", { replace: true });
   };
 
   const isLoggedIn = token !== null;

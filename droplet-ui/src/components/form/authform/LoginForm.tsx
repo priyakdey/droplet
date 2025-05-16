@@ -12,6 +12,7 @@ import { authenticate } from "@/service/authService.ts";
 import { emailSchema, passwordSchema } from "@/types/formSchema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 import "./AuthForm.css";
@@ -32,11 +33,13 @@ function LoginForm() {
   });
 
   const { login } = useAuth();
+  const navigate = useNavigate();
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function handleLogin(values: z.infer<typeof loginSchema>) {
     authenticate(values)
       .then((data) => {
         login(data.token);
+        navigate("/home", { replace: true });
       })
       .catch((error: Error) => {
         const description = typeof error.cause === "string"
@@ -47,7 +50,7 @@ function LoginForm() {
 
   return (
     <Form {...form}>
-      <form className="auth-form" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="auth-form" onSubmit={form.handleSubmit(handleLogin)}>
         {/* email */}
         <FormField control={form.control} name="email"
                    render={({ field }) => (

@@ -30,13 +30,13 @@ function SignupForm() {
     }
   });
 
-  function onSubmit(values: z.infer<typeof signupSchema>) {
+  function handleSignup(values: z.infer<typeof signupSchema>) {
     console.log(values);
   }
 
   return (
     <Form {...form}>
-      <form className="auth-form" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="auth-form" onSubmit={form.handleSubmit(handleSignup)}>
         {/* name */}
         <FormField control={form.control} name="name" render={({ field }) => (
           <FormItem>

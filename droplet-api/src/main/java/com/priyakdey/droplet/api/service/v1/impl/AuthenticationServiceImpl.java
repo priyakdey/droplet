@@ -111,7 +111,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthResponse authenticate(String email, SecureCharSequence rawPassword) {
         Optional<Account> optional = accountService.getByEmail(email);
         if (optional.isEmpty()) {
-            throw new InvalidCredentialsException("Invalid credentials.");
+            throw new InvalidCredentialsException("This email is not registered with us.");
         }
 
         Account account = optional.get();

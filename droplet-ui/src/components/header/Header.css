@@ -11,3 +11,16 @@
 .App-logo {
   padding-left: 200px;
 }
+
+.github-logo {
+  height: 40px;
+  width: 40px;
+}
+
+.App-header-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
