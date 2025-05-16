@@ -1,4 +1,5 @@
-import LoginForm from "@/components/form/loginform/LoginForm.tsx";
+import LoginForm from "@/components/form/authform/LoginForm.tsx";
+import SignupForm from "@/components/form/authform/SignupForm.tsx";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/layout/AppLayout.tsx";
 import { useState } from "react";
@@ -26,7 +27,7 @@ function WelcomePage() {
             Signup
           </Button>
         </div>
-        {isLoginTabSelected ? <LoginForm /> : <p>Signup Form</p>}
+        {isLoginTabSelected ? <LoginForm /> : <SignupForm />}
       </div>
     </AppLayout>
   );

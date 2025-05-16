@@ -7,33 +7,16 @@ import {
   FormMessage
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { emailSchema, passwordSchema } from "@/types/formSchema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import "./LoginForm.css";
+import "./AuthForm.css";
 
-const ALLOWED_SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;:'\",.<>?/`~\\";
 
 const loginSchema = z.object({
-  email: z.string()
-    .min(1, "Email is required")
-    .max(254, "Email is too lengthy")
-    .email("Invalid email address"),
-  password: z.string()
-    .min(8, "Password must be between 8-20 characters")
-    .max(20, "Password must be between 8-20 characters")
-    .refine(val => /[A-Z]/.test(val), {
-      message: "Password must contain an uppercase letter"
-    })
-    .refine(val => /[a-z]/.test(val), {
-      message: "Password must contain a lowercase letter"
-    })
-    .refine(val => /\d/.test(val), {
-      message: "Password must contain a digit"
-    })
-    .refine(val => new RegExp(`[${ALLOWED_SPECIAL_CHARS.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")}]`).test(val), {
-      message: `Password must contain a special character`
-    })
+  email: emailSchema,
+  password: passwordSchema
 });
 
 function LoginForm() {
@@ -51,7 +34,7 @@ function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="auth-form" onSubmit={form.handleSubmit(onSubmit)}>
         {/* email */}
         <FormField control={form.control} name="email"
                    render={({ field }) => (

@@ -1,0 +1,46 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  background: var(--frosted-glass);
+  padding: 20px;
+  border: 2px solid var(--accent);
+  border-top: none;
+  box-shadow: inset 0 2px 4px var(--accent);
+  border-radius: var(--radius);
+}
+
+.auth-form input {
+  background-color: var(--input);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  transition: border-color 0.2s ease-in-out;
+}
+
+.auth-form input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.auth-form button[type="submit"] {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  transition: background 0.2s;
+}
+
+.auth-form button[type="submit"]:hover {
+  background-color: color-mix(in srgb, var(--accent-hover) 85%, black);
+  cursor: pointer;
+}
+
+.auth-form button[type="submit"]:active {
+  transform: scale(0.98);
+}
