@@ -12,11 +12,6 @@
   padding-left: 200px;
 }
 
-.github-logo {
-  height: 35px;
-  width: 35px;
-}
-
 .App-header-menu {
   display: flex;
   flex-direction: row;

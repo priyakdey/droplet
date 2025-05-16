@@ -1,5 +1,4 @@
 import dropletLogo from "@/assets/droplet-logo.svg";
-import githubLogo from "@/assets/github-mark.svg";
 import EditProfileForm
   from "@/components/form/editprofileform/EditProfileForm.tsx";
 import { Button } from "@/components/ui/button.tsx";
@@ -15,8 +14,8 @@ import {
 } from "@/components/ui/sheet.tsx";
 import useAuth from "@/hooks/useAuth.ts";
 import { UserCog2Icon } from "lucide-react";
-import "./Header.css";
 import { useRef } from "react";
+import "./Header.css";
 
 function Header() {
   const { isLoggedIn, logout } = useAuth();
@@ -63,13 +62,6 @@ function Header() {
             </Button>
           </>
         }
-        <Button type="button" variant="link" asChild>
-          <a href="https://github.com/priyakdey/droplet"
-             rel="noreferrer noopener"
-             target="_blank">
-            <img className="github-logo" src={githubLogo} alt="github logo" />
-          </a>
-        </Button>
       </div>
     </header>
   );
