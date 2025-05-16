@@ -8,7 +8,7 @@ interface ProfileMetadataDto {
   profileId: number;
   homeDirId: string;
   name: string;
-  timeZone: string;
+  timezone: string;
 }
 
 export interface AuthResponse {

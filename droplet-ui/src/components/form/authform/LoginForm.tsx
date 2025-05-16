@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import useAuth from "@/hooks/useAuth.ts";
+import useProfile from "@/hooks/useProfile.ts";
 import { authenticate } from "@/service/authService.ts";
 import { emailSchema, passwordSchema } from "@/types/formSchema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,12 +34,21 @@ function LoginForm() {
   });
 
   const { login } = useAuth();
+  const { setProfileDetails } = useProfile();
   const navigate = useNavigate();
 
   function handleLogin(values: z.infer<typeof loginSchema>) {
     authenticate(values)
       .then((data) => {
-        login(data.token);
+        const token = data.token;
+        const accountId = data.profile.accountId;
+        const profileId = data.profile.profileId;
+        const homeDirId = data.profile.homeDirId;
+        const name = data.profile.name;
+        const timezone = data.profile.timezone;
+
+        login(token);
+        setProfileDetails(accountId, profileId, homeDirId, name, timezone);
         navigate("/home", { replace: true });
       })
       .catch((error: Error) => {

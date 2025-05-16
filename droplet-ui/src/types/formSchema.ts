@@ -27,3 +27,4 @@ export const passwordSchema = z.string()
     message: `Password must contain a special character`
   });
 
+export const timezoneSchema = z.string().min(1, "Timezone is required");
