@@ -1,6 +1,7 @@
 import dropletLogo from "@/assets/droplet-logo.svg";
 import githubLogo from "@/assets/github-mark.svg";
-import EditProfileForm from "@/components/form/editprofile/EditProfileForm.tsx";
+import EditProfileForm
+  from "@/components/form/editprofileform/EditProfileForm.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
   Sheet,
@@ -40,7 +41,7 @@ function Header() {
                   Profile
                 </Button>
               </SheetTrigger>
-              <SheetContent>
+              <SheetContent onOpenAutoFocus={event => event.preventDefault()}>
                 <SheetHeader>
                   <SheetTitle>Edit Profile</SheetTitle>
                   <SheetDescription>

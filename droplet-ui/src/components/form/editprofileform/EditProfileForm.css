@@ -1,0 +1,24 @@
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  gap: 20px;
+  padding: 30px 15px 15px;
+}
+
+.edit-profile-form-input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.edit-profile-form-label {
+  flex: 0 0 20%;
+}
+
+.edit-profile-form-input-container > *:not(.edit-profile-form-label) {
+  flex: 1;
+}

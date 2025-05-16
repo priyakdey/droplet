@@ -1,3 +1,4 @@
+import TimezoneSelect from "@/components/timezoneslect/TimezoneSelect.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
   Form,
@@ -11,7 +12,6 @@ import { Label } from "@/components/ui/label.tsx";
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select.tsx";
@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import "./EditProfileForm.css";
 
 const editProfileSchema = z.object({
   name: nameSchema,
@@ -36,18 +37,24 @@ interface EditProfileFormPropsType {
 
 function EditProfileForm({ closeSheet }: EditProfileFormPropsType) {
   const [ timezones, setTimeZones ] = useState<string[]>([]);
+  const [ isLoaded, setIsLoaded ] = useState<boolean>(false);
   const { name, timezone } = useProfile();
   const { token } = useAuth();
 
   useEffect(() => {
+    if (isLoaded) return;
+
     getAllAvailableTimezones(token!)
-      .then(data => setTimeZones(data))
+      .then(data => {
+        setTimeZones(data);
+        setIsLoaded(true);
+      })
       .catch(error => {
         const description = typeof error.cause === "string"
           ? error.cause : "An unknown error occurred";
         toast.error(error.message, { description: description });
       });
-  }, []);
+  }, [ token, isLoaded ]);
 
   const form = useForm<z.infer<typeof editProfileSchema>>({
     resolver: zodResolver(editProfileSchema),
@@ -64,15 +71,20 @@ function EditProfileForm({ closeSheet }: EditProfileFormPropsType) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleEditProfile)}>
+      <form className="edit-profile-form"
+            onSubmit={form.handleSubmit(handleEditProfile)}>
         {/* name */}
         <FormField control={form.control} name="name" render={({ field }) => (
           <FormItem>
             <FormControl>
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" type="name" value={field.value}
-                       onChange={field.onChange} />
+              <div className="edit-profile-form-input-container">
+                <Label htmlFor="name"
+                       className="edit-profile-form-label"
+                >
+                  Name
+                </Label>
+                <Input id="name" type="text" autoFocus={false}
+                       autoComplete={"off"} {...field} />
               </div>
 
             </FormControl>
@@ -86,22 +98,21 @@ function EditProfileForm({ closeSheet }: EditProfileFormPropsType) {
                    render={({ field }) => (
                      <FormItem>
                        <FormControl>
-                         <div>
-                           <Label id="timezone-label">Select Timezone</Label>
+                         <div className="edit-profile-form-input-container">
+                           <Label id="timezone-label"
+                                  className="edit-profile-form-label"
+                           >
+                             Timezone
+                           </Label>
                            <Select aria-labelledby="timezone-label"
                                    value={field.value}
-                                   onValueChange={field.onChange}>
+                                   onValueChange={field.onChange}
+                           >
                              <SelectTrigger>
                                <SelectValue placeholder="Select Timezone" />
                              </SelectTrigger>
                              <SelectContent>
-                               {
-                                 timezones.map((tz) => (
-                                   <SelectItem key={tz} value={tz}>
-                                     {tz}
-                                   </SelectItem>
-                                 ))
-                               }
+                               <TimezoneSelect timezones={timezones} />
                              </SelectContent>
                            </Select>
                          </div>

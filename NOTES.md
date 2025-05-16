@@ -35,4 +35,4 @@ conversions of `char[]` to a `byte[]` without using String to make sure its secu
     - [ ] Make sure edit profile name is not selected
     - [ ] type ahead, fuzzy search for timezone
     - [ ] cache the timezones, would be great to actually show places with offset.
-
+    - [ ] Render of the available timezones is slow, cause of huge list. memo did not help, try ComboBox
