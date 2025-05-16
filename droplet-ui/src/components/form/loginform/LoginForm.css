@@ -1,0 +1,24 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 0.95rem;
+  border: 1px solid #3E3E41;
+  background-color: transparent;
+  color: var(--accent-foreground, #E5E5E5);
+  border-radius: 0.5rem;
+  transition: border 0.2s ease;
+}
+
+.form-container input:focus {
+  outline: none;
+  border-color: var(--primary, #6D33E8);
+}
