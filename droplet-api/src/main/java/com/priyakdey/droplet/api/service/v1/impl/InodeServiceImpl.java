@@ -2,6 +2,7 @@ package com.priyakdey.droplet.api.service.v1.impl;
 
 import com.priyakdey.droplet.api.entity.v1.Directory;
 import com.priyakdey.droplet.api.exception.ServerException;
+import com.priyakdey.droplet.api.model.dto.v1.DirectoryDto;
 import com.priyakdey.droplet.api.repository.v1.DirectoryRepository;
 import com.priyakdey.droplet.api.repository.v1.FileRepository;
 import com.priyakdey.droplet.api.service.v1.InodeService;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -56,5 +58,11 @@ public class InodeServiceImpl implements InodeService {
     @Transactional
     public void deleteById(ObjectId id) {
         directoryRepository.deleteById(id);
+    }
+
+    @Override
+    public List<DirectoryDto> getAllDirectories(Integer ownerId) {
+        return directoryRepository.findAllByOwnerId(ownerId).stream()
+                .map(DirectoryDto::fromDirectory).toList();
     }
 }

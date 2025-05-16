@@ -1,0 +1,25 @@
+.HomePage-app-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.HomePage-wrapper-container {
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  width: 450px;
+  padding: 1rem 2rem;
+  border: 1px solid var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 0 15px var(--popover);
+  transition: all 0.3s ease-in-out;
+  background: var(--frosted-glass);
+  backdrop-filter: blur(10px);
+}
+
+.HomePage-wrapper-container-2 {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+}

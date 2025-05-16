@@ -2,7 +2,7 @@ import AppLayout from "@/layout/AppLayout.tsx";
 
 function HomePage() {
   return (
-    <AppLayout>
+    <AppLayout className="HomePage-app-layout">
       HomePage
     </AppLayout>
   );

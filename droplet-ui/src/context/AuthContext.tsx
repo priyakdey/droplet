@@ -39,7 +39,7 @@ function AuthProvider({ children }: AuthProviderPropsType) {
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem("token");
+    localStorage.clear();
     navigate("/", { replace: true });
   };
 

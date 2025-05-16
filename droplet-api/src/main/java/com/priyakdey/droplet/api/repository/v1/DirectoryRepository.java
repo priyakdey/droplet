@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,5 +15,7 @@ import java.util.Optional;
 public interface DirectoryRepository extends MongoRepository<Directory, ObjectId> {
 
     Optional<Directory> findByOwnerId(Integer ownerId);
+
+    List<Directory> findAllByOwnerId(Integer ownerId);
 
 }

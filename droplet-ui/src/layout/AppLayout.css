@@ -1,5 +1,18 @@
+.App-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+  max-height: 100vh;
+}
+
+.App-main-wrapper {
+  display: flex;
+  overflow-x: hidden;
+}
+
 .App-main {
   min-width: 100%;
   min-height: calc(100vh - var(--header-container-height) - var(--footer-container-height));
-  padding-top: 50px;
+  overflow-y: hidden;
 }
