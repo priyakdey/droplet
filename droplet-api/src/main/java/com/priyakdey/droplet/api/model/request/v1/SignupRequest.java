@@ -18,7 +18,7 @@ public class SignupRequest implements Serializable {
 
     private SecureCharSequence password;
 
-    private String timeZone;
+    private String timezone;
 
     public String getName() {
         return name;
@@ -44,11 +44,11 @@ public class SignupRequest implements Serializable {
         this.password = password;
     }
 
-    public String getTimeZone() {
-        return timeZone;
+    public String getTimezone() {
+        return timezone;
     }
 
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
     }
 }

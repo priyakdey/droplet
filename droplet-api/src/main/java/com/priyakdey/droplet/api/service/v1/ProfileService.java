@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public interface ProfileService {
 
-    Profile create(String name, String timeZone, Account account);
+    Profile create(String name, String timezone, Account account);
 
     Optional<Profile> getProfile(Account account);
 

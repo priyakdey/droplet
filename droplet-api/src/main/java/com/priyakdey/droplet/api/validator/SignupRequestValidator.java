@@ -104,7 +104,7 @@ public interface SignupRequestValidator
 
     static SignupRequestValidator isValidTimezone() {
         return req -> {
-            String timezone = req.getTimeZone();
+            String timezone = req.getTimezone();
             try {
                 ZoneId.of(timezone);
             } catch (ZoneRulesException ex) {

@@ -50,14 +50,14 @@ public class SignupController {
 
         String name = signupRequest.getName();
         String email = signupRequest.getEmail();
-        String timeZone = signupRequest.getTimeZone();
+        String timezone = signupRequest.getTimezone();
         SecureCharSequence password = signupRequest.getPassword();
 
         String passwordHash = passwordEncoder.encode(password);
         password.clear();
 
 
-        SignupDto dto = SignupDto.from(name, email, passwordHash, timeZone);
+        SignupDto dto = SignupDto.from(name, email, passwordHash, timezone);
         AuthResponse authResponse = authenticationService.signup(dto);
         URI location = URI.create("/v1/profiles/" + authResponse.getProfile().profileId());
         return ResponseEntity.created(location).body(authResponse);

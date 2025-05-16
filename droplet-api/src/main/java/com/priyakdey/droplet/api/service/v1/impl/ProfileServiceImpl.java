@@ -26,9 +26,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public Profile create(String name, String timeZone, Account account) {
+    public Profile create(String name, String timezone, Account account) {
         String containerName = "home-" + account.getId();
-        Profile profile = new Profile(name, timeZone, containerName, account);
+        Profile profile = new Profile(name, timezone, containerName, account);
         return profileRepository.save(profile);
     }
 

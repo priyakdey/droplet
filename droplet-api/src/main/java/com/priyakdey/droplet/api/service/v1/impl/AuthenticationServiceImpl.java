@@ -64,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String name = signupDto.name();
         String password = signupDto.password();
-        String timeZone = signupDto.timeZone();
+        String timezone = signupDto.timezone();
 
         Account account = null;
         Profile profile = null;
@@ -75,7 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             account = accountService.create(email, password);
             accountCreated = true;
 
-            profile = profileService.create(name, timeZone, account);
+            profile = profileService.create(name, timezone, account);
             profileCreated = true;
 
             homeDir = inodeService.createHomeDir(account.getId());
@@ -88,7 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String token = tokenService.generate(account.getId(), name);
 
             ProfileMetadataDto profileMetadataDto = new ProfileMetadataDto(account.getId(),
-                    profile.getId(), homeDir.getId().toHexString(), name, timeZone);
+                    profile.getId(), homeDir.getId().toHexString(), name, timezone);
 
             AuthResponse authResponse = new AuthResponse();
             authResponse.setProfile(profileMetadataDto);
