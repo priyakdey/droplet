@@ -1,0 +1,26 @@
+.SocialAuthButton {
+  width: 220px;
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+  gap: 12px;
+  padding: 0 16px;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+}
+
+.SocialAuthButton:hover {
+  transform: scale(1.02);
+}
+
+.SocialAuthButton img {
+  --dimension: 24px;
+
+  height: var(--dimension);
+  width: var(--dimension);
+}

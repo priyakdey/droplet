@@ -1,0 +1,29 @@
+.FeatureCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  width: 100%;
+  max-width: 200px;
+}
+
+.FeatureCard-logo {
+  height: 35px;
+  width: 35px;
+  color: var(--primary);
+}
+
+.FeatureCard-header {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--primary);
+}
+
+.FeatureCard-subtext {
+  font-size: 14px;
+  color: var(--secondary-foreground);
+  line-height: 1.4;
+}

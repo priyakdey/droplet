@@ -1,0 +1,88 @@
+.WelcomePage {
+  min-height: 100vh;
+  width: 100vw;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.WelcomePage-main {
+  width: 100%;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.WelcomePage-logo {
+  --logo-dimension: 200px;
+
+  height: var(--logo-dimension);
+  width: var(--logo-dimension);
+}
+
+.WelcomePage-content-container {
+  width: 80%;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--card);
+  border-radius: var(--radius);
+  background: var(--frosted-glass);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  padding: 32px;
+  gap: 48px;
+}
+
+.WelcomePage-content-container > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.WelcomePage-content-container > *:first-child {
+  border-right: 1px solid var(--card);
+  padding-right: 32px;
+}
+
+.WelcomePage-content {
+  gap: 32px;
+}
+
+.WelcomePage-content-header {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.25;
+  color: var(--primary);
+  text-align: center;
+}
+
+.WelcomePage-content-subtext {
+  color: var(--secondary-foreground);
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 80%;
+}
+
+.WelcomePage-features {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.WelcomePage-cta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+
