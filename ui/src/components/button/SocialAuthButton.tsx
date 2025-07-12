@@ -5,12 +5,12 @@ import "./SocialAuthButton.css";
 interface SocialAuthButtonProps {
   logo: string;
   text: string;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
-function SocialAuthButton({ logo, text }: SocialAuthButtonProps) {
+function SocialAuthButton({ logo, text, onClick }: SocialAuthButtonProps) {
   return (
-    <Button variant="default" type="button"
+    <Button variant="default" type="button" onClick={onClick}
             className="SocialAuthButton">
       <img src={logo} alt="google logo" />
       {text}

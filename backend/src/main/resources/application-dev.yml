@@ -1,0 +1,27 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: droplet_user
+      password: droplet_password
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: http://localhost:8080/api/auth/google/callback
+
+token:
+  state:
+    providers:
+      google:
+        secret: ${GOOGLE_STATE_SECRET}
+        issuer: droplet-oauth
+        expiration-in-sec: 300
+        leeway-in-sec: 10
+  jwt:
+    secret: ${JWT_SESSION_SECRET}
+    issuer: droplet
+    expiration-in-sec: 3600
+    leeway-in-sec: 30

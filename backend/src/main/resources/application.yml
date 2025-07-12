@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: droplet
+  data:
+    mongodb:
+      database: droplet
+      authentication-database: droplet
+  security:
+    oauth2:
+      client:
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+        registration:
+          google:
+            client-name: droplet-${spring.profiles.active}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - openid
+              - email
+              - profile
+              - phone
+              - address
+
+instance_id: ${random.value}
+
+logging:
+  pattern:
+    correlation: "[${spring.application.name:}-${instance_id:},%X{traceId:-},%X{spanId:-}]"
+  include-application-name: false
