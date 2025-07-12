@@ -43,6 +43,29 @@ public class TokenConfiguration {
         return new TokenService<>(signer, verifier);
     }
 
+    @Bean("githubOAuthStateTokenService")
+    public TokenService<StatePayload> githubOAuthStateTokenService(TokenProperties tokenProperties) {
+        TokenProperties.Token provider = tokenProperties.getState().getProviders().get("github");
+        byte[] secret = provider.secret();
+        String issuer = provider.issuer();
+        int expirationInSec = provider.expirationInSec();
+        int leewayInSec = provider.leewayInSec();
+
+        Function<StatePayload, Map<String, ?>> serializer = payload ->
+                Map.of("nonce", payload.nonce(), "ts", payload.timestamp());
+        Function<DecodedJWT, StatePayload> deserializer = decodedJwt ->
+                new StatePayload(decodedJwt.getClaim("nonce").asString(),
+                        decodedJwt.getClaim("ts").asLong());
+
+        TokenSigner<StatePayload> signer =
+                new Hmac256Signer<>(secret, serializer, issuer, expirationInSec);
+        TokenVerifier<StatePayload> verifier = new Hmac256Verifier<>(secret, deserializer, issuer,
+                leewayInSec);
+
+        Arrays.fill(secret, (byte) 0x0);
+        return new TokenService<>(signer, verifier);
+    }
+
     @Bean("sessionTokenService")
     public TokenService<SessionPayload> sessionTokenService(TokenProperties tokenProperties) {
         TokenProperties.Token jwt = tokenProperties.getJwt();
@@ -56,7 +79,7 @@ public class TokenConfiguration {
                         "eat", payload.eat(), "sub", payload.sub());
         Function<DecodedJWT, SessionPayload> deserializer = decodedJwt ->
                 new SessionPayload(decodedJwt.getIssuer(), decodedJwt.getIssuedAtAsInstant(),
-                        decodedJwt.getExpiresAtAsInstant(), decodedJwt.getSubject());
+                        decodedJwt.getExpiresAtAsInstant(), decodedJwt.getSubject(), expirationInSec);
 
         TokenSigner<SessionPayload> signer =
                 new Hmac256Signer<>(secret, serializer, issuer, expirationInSec);

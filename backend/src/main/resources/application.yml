@@ -12,6 +12,10 @@ spring:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
             token-uri: https://oauth2.googleapis.com/token
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
         registration:
           google:
             client-name: droplet-${spring.profiles.active}
@@ -21,8 +25,13 @@ spring:
               - openid
               - email
               - profile
-              - phone
-              - address
+          github:
+            client-name: droplet-${spring.profiles.active}
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - read:user
+              - read:email
 
 instance_id: ${random.value}
 

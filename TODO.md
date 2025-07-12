@@ -1,6 +1,6 @@
 ### Authentication
 - [X] Landing Page
-- [ ] Login with Google (OAuth)
+- [X] Login with Google (OAuth)
 - [ ] Login with GitHub
 - [ ] Login with Facebook
 - [ ] Secure cookie-based authentication (HttpOnly + SameSite=strict)

@@ -10,8 +10,8 @@ import "./WelcomePage.css";
 
 function WelcomePage() {
 
-  function handleGoogleLogin() {
-    window.location.href = "http://localhost:8080/api/auth/google/login";
+  function handleLogin(provider: string) {
+    window.location.href = `http://localhost:8080/api/auth/${provider}/login`;
   }
 
   return (
@@ -66,17 +66,17 @@ function WelcomePage() {
             <div className="WelcomePage-cta">
               <div>
                 <SocialAuthButton logo={googleLogo} text={"Login With Google"}
-                                  onClick={handleGoogleLogin} />
+                                  onClick={() => handleLogin("google")} />
               </div>
               <div>
                 <SocialAuthButton logo={githubLogoDark}
                                   text={"Login With Github"}
-                                  onClick={handleGoogleLogin} />
+                                  onClick={() => handleLogin("github")} />
               </div>
               <div>
                 <SocialAuthButton logo={faceBookLogo}
                                   text={"Login With Facebook"}
-                                  onClick={handleGoogleLogin} />
+                                  onClick={() => handleLogin("facebook")} />
               </div>
             </div>
           </motion.div>

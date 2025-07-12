@@ -11,12 +11,19 @@ spring:
         registration:
           google:
             redirect-uri: http://localhost:8080/api/auth/google/callback
+          github:
+            redirect-uri: http://localhost:8080/api/auth/github/callback
 
 token:
   state:
     providers:
       google:
         secret: ${GOOGLE_STATE_SECRET}
+        issuer: droplet-oauth
+        expiration-in-sec: 300
+        leeway-in-sec: 10
+      github:
+        secret: ${GITHUB_STATE_SECRET}
         issuer: droplet-oauth
         expiration-in-sec: 300
         leeway-in-sec: 10

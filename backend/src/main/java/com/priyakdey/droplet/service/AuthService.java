@@ -5,8 +5,8 @@ import org.bson.types.ObjectId;
 /**
  * @author Priyak Dey
  */
-public interface AuthService {
+public interface AuthService<T> {
 
-    ObjectId login(String token);
+    ObjectId login(T t);
 
 }

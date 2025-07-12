@@ -1,7 +1,8 @@
 package com.priyakdey.droplet.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.priyakdey.droplet.model.response.GoogleOAuthResponse;
+import com.priyakdey.droplet.model.response.GithubOAuthResponse;
+import com.priyakdey.droplet.model.response.GithubUserInfoResponse;
 import com.priyakdey.droplet.security.SessionPayload;
 import com.priyakdey.droplet.security.StatePayload;
 import com.priyakdey.droplet.security.TokenProperties;
@@ -24,30 +25,28 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-
 /**
  * @author Priyak Dey
  */
 @RestController
-@RequestMapping(path = "/api/auth/google")
-public class GoogleLoginController implements LoginController {
+@RequestMapping("/api/auth/github")
+public class GithubLoginController implements LoginController {
 
     private final TokenService<StatePayload> tokenService;
     private final ClientRegistrationRepository clientRegistrationRepository;
-    private final AuthService<String> authService;
+    private final AuthService<GithubUserInfoResponse> authService;
     private final CookieService cookieService;
     private final TokenProperties tokenProperties;
     private final RestClient restClient;
 
-    public GoogleLoginController(
-            @Qualifier("googleOAuthStateTokenService") TokenService<StatePayload> stateTokenService,
+    public GithubLoginController(
+            @Qualifier("githubOAuthStateTokenService") TokenService<StatePayload> tokenService,
             ClientRegistrationRepository clientRegistrationRepository,
-            @Qualifier("googleAuthServiceImpl") AuthService<String> authService,
+            @Qualifier("githubAuthServiceImpl") AuthService<GithubUserInfoResponse> authService,
             CookieService cookieService,
             TokenProperties tokenProperties,
             RestClient restClient) {
-        this.tokenService = stateTokenService;
+        this.tokenService = tokenService;
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.authService = authService;
         this.cookieService = cookieService;
@@ -61,12 +60,12 @@ public class GoogleLoginController implements LoginController {
         String nonce = UUID.randomUUID().toString();
         String state = tokenService.generate(new StatePayload(nonce, Instant.now().toEpochMilli()));
 
-        ClientRegistration google = clientRegistrationRepository.findByRegistrationId("google");
-        String clientName = google.getClientName();
-        String clientId = google.getClientId();
-        String redirectUri = google.getRedirectUri();
-        String scope = String.join(" ", google.getScopes());
-        String authorizationUri = google.getProviderDetails().getAuthorizationUri();
+        ClientRegistration github = clientRegistrationRepository.findByRegistrationId("github");
+        String clientName = github.getClientName();
+        String clientId = github.getClientId();
+        String redirectUri = github.getRedirectUri();
+        String scope = String.join(" ", github.getScopes());
+        String authorizationUri = github.getProviderDetails().getAuthorizationUri();
 
         Map<String, Object> params = Map.of(
                 "state", state,
@@ -78,9 +77,9 @@ public class GoogleLoginController implements LoginController {
                 "prompt", "select_account"
         );
 
-        URI googleLoginUri = buildUri(authorizationUri, params);
+        URI githubLoginUri = buildUri(authorizationUri, params);
 
-        return ResponseEntity.status(HttpStatus.FOUND).location(googleLoginUri).build();
+        return ResponseEntity.status(HttpStatus.FOUND).location(githubLoginUri).build();
     }
 
     @Override
@@ -93,13 +92,13 @@ public class GoogleLoginController implements LoginController {
             throw new RuntimeException("JWT verification failed");  // TODO: custom exceptions
         }
 
-        ClientRegistration google = clientRegistrationRepository.findByRegistrationId("google");
-        String clientName = google.getClientName();
-        String clientId = google.getClientId();
-        String clientSecret = google.getClientSecret();
-        String redirectUri = google.getRedirectUri();
+        ClientRegistration github = clientRegistrationRepository.findByRegistrationId("github");
+        String clientName = github.getClientName();
+        String clientId = github.getClientId();
+        String clientSecret = github.getClientSecret();
+        String redirectUri = github.getRedirectUri();
 
-        String tokenUri = google.getProviderDetails().getTokenUri();
+        String tokenUri = github.getProviderDetails().getTokenUri();
 
         Map<String, Object> params = Map.of(
                 "client_name", clientName,
@@ -112,20 +111,35 @@ public class GoogleLoginController implements LoginController {
 
         URI uri = buildUri(tokenUri, params);
 
-        ResponseEntity<GoogleOAuthResponse> response = restClient.post()
+        ResponseEntity<GithubOAuthResponse> accessTokenResponse = restClient.post()
                 .uri(uri)
-                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
+                .header(HttpHeaders.ACCEPT, "application/json")
                 .retrieve()     // TODO: handle error
-                .toEntity(GoogleOAuthResponse.class);
+                .toEntity(GithubOAuthResponse.class);
 
-        HttpStatusCode statusCode = response.getStatusCode();
-        if (!statusCode.is2xxSuccessful() || !response.hasBody()) {
+        HttpStatusCode statusCode = accessTokenResponse.getStatusCode();
+        if (!statusCode.is2xxSuccessful() || !accessTokenResponse.hasBody()) {
             // TODO: custom exception
             throw new RuntimeException("Failed to exchange code for token for google. Response code: " + statusCode);
         }
 
-        String idToken = response.getBody().getIdToken();
-        ObjectId id = authService.login(idToken);
+        String accessToken = accessTokenResponse.getBody().getAccessToken();
+
+        String userInfoUri = github.getProviderDetails().getUserInfoEndpoint().getUri();
+        ResponseEntity<GithubUserInfoResponse> userInfoResponseResponse = restClient.get()
+                .uri(userInfoUri)
+                .header(HttpHeaders.ACCEPT, "application/json")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .toEntity(GithubUserInfoResponse.class);
+        statusCode = userInfoResponseResponse.getStatusCode();
+        if (!statusCode.is2xxSuccessful() || !accessTokenResponse.hasBody()) {
+            // TODO: custom exception
+            throw new RuntimeException("Failed to exchange code for token for google. Response code: " + statusCode);
+        }
+
+        GithubUserInfoResponse body = userInfoResponseResponse.getBody();
+        ObjectId id = authService.login(body);
 
         Instant iat = Instant.now();
         TokenProperties.Token jwtProps = tokenProperties.getJwt();
@@ -136,8 +150,7 @@ public class GoogleLoginController implements LoginController {
         ResponseCookie cookie = cookieService.getCookie(payload);
 
         URI homePage = URI.create("http://localhost:5173/home");        // TODO: env driven
-        return ResponseEntity.status(HttpStatus.FOUND).location(homePage)
-                .header(HttpHeaders.SET_COOKIE, cookie.getValue()).build();
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.SET_COOKIE, cookie.getValue()).location(homePage).build();
     }
-
 }

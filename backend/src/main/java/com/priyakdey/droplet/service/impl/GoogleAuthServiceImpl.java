@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
  * @author Priyak Dey
  */
 @Service
-public class GoogleAuthServiceImpl implements AuthService {
+public class GoogleAuthServiceImpl implements AuthService<String> {
     private static final String PROVIDER_NAME = "google";
-    private static final String PROVIDER_ID_DMT = "google|%s";
+    private static final String PROVIDER_ID_FMT = "google|%s";
 
     private final ProfileService profileService;
 
@@ -29,7 +29,7 @@ public class GoogleAuthServiceImpl implements AuthService {
             DecodedJWT decodedJWT = JWT.decode(token);
 
             String sub = decodedJWT.getSubject();
-            String providerId = String.format(PROVIDER_ID_DMT, sub);
+            String providerId = String.format(PROVIDER_ID_FMT, sub);
 
             if (profileService.existsByProviderId(providerId)) {
                 return profileService.getByProviderId(providerId);
