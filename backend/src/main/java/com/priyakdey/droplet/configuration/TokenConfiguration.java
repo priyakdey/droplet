@@ -17,7 +17,7 @@ import java.util.function.Function;
  * @author Priyak Dey
  */
 @Configuration
-@EnableConfigurationProperties({TokenProperties.class})
+@EnableConfigurationProperties({TokenProperties.class, AppCorsProperties.class})
 public class TokenConfiguration {
 
     @Bean("googleOAuthStateTokenService")
@@ -75,8 +75,11 @@ public class TokenConfiguration {
         int leewayInSec = jwt.leewayInSec();
 
         Function<SessionPayload, Map<String, ?>> serializer = payload ->
-                Map.of("iss", payload.issuer(), "iat", payload.iat(),
-                        "eat", payload.eat(), "sub", payload.sub());
+                Map.of("iss", payload.issuer(),
+                        "iat", payload.iat(),
+                        "eat", payload.eat(),
+                        "sub", payload.sub(),
+                        "ttl", expirationInSec);
         Function<DecodedJWT, SessionPayload> deserializer = decodedJwt ->
                 new SessionPayload(decodedJwt.getIssuer(), decodedJwt.getIssuedAtAsInstant(),
                         decodedJwt.getExpiresAtAsInstant(), decodedJwt.getSubject(), expirationInSec);

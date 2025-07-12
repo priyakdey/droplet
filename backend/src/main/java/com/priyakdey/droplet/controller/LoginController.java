@@ -155,11 +155,11 @@ public abstract class LoginController<T> {
 
         SessionPayload payload = new SessionPayload(jwtProps.issuer(), iat, eat, profileId,
                 jwtProps.expirationInSec());
-        ResponseCookie cookie = cookieService.getCookie(payload);
+        ResponseCookie cookie = cookieService.create(payload);
 
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header(HttpHeaders.SET_COOKIE, cookie.getValue())
                 .location(homePageUri)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .build();
     }
 

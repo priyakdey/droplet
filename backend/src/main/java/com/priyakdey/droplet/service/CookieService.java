@@ -8,6 +8,6 @@ import org.springframework.http.ResponseCookie;
  */
 public interface CookieService {
 
-    ResponseCookie getCookie(SessionPayload payload);
+    ResponseCookie create(SessionPayload payload);
 
 }

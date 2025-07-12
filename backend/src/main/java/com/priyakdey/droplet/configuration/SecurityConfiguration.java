@@ -1,6 +1,6 @@
 package com.priyakdey.droplet.configuration;
 
-import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
+import com.priyakdey.droplet.security.AppCorsProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,8 +23,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/**").permitAll()
@@ -34,11 +34,11 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public WebMvcConfigurer webMvcConfigurer(CorsEndpointProperties corsEndpointProperties) {
-        String[] allowedOrigins = corsEndpointProperties.getAllowedOrigins().toArray(String[]::new);
-        String[] allowedMethods = corsEndpointProperties.getAllowedMethods().toArray(String[]::new);
-        boolean allowCredentials = corsEndpointProperties.getAllowCredentials();
-        String[] allowedHeaders = corsEndpointProperties.getAllowedHeaders().toArray(String[]::new);
+    public WebMvcConfigurer webMvcConfigurer(AppCorsProperties appCorsProperties) {
+        String[] allowedOrigins = appCorsProperties.getAllowedOrigins().toArray(String[]::new);
+        String[] allowedMethods = appCorsProperties.getAllowedMethods().toArray(String[]::new);
+        String[] allowedHeaders = appCorsProperties.getAllowedHeaders().toArray(String[]::new);
+        boolean allowCredentials = appCorsProperties.isAllowCredentials();
 
         return new WebMvcConfigurer() {
             @Override

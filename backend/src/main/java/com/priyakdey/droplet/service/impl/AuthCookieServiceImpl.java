@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
  * @author Priyak Dey
  */
 @Service
-public class CookieServiceImpl implements CookieService {
+public class AuthCookieServiceImpl implements CookieService {
     private final TokenService<SessionPayload> sessionTokenService;
 
-    public CookieServiceImpl(TokenService<SessionPayload> sessionTokenService) {
+    public AuthCookieServiceImpl(TokenService<SessionPayload> sessionTokenService) {
         this.sessionTokenService = sessionTokenService;
     }
 
     @Override
-    public ResponseCookie getCookie(SessionPayload payload) {
+    public ResponseCookie create(SessionPayload payload) {
         String token = sessionTokenService.generate(payload);
 
         return ResponseCookie.from("token", token)
