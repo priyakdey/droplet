@@ -3,10 +3,13 @@ package com.priyakdey.droplet.service.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.priyakdey.droplet.exception.AuthException;
 import com.priyakdey.droplet.model.dto.NewProfileDto;
 import com.priyakdey.droplet.service.AuthService;
 import com.priyakdey.droplet.service.ProfileService;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GoogleAuthServiceImpl implements AuthService<String> {
+    private static final Logger logger = LoggerFactory.getLogger(GoogleAuthServiceImpl.class);
+
     private static final String PROVIDER_NAME = "google";
     private static final String PROVIDER_ID_FMT = "google|%s";
 
@@ -43,7 +48,8 @@ public class GoogleAuthServiceImpl implements AuthService<String> {
             return profileService.save(dto);
 
         } catch (JWTDecodeException e) {
-            throw new RuntimeException(e); // TODO: custom exception
+            logger.error("Could not decode google id_token: ", e);
+            throw new AuthException();
         }
 
     }

@@ -1,7 +1,7 @@
 ### Authentication
 - [X] Landing Page
 - [X] Login with Google (OAuth)
-- [ ] Login with GitHub
+- [X] Login with GitHub
 - [ ] Login with Facebook
 - [ ] Secure cookie-based authentication (HttpOnly + SameSite=strict)
 - [ ] Profile API (fetch user info post login)

@@ -1,5 +1,6 @@
 package com.priyakdey.droplet.configuration;
 
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,14 +34,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public WebMvcConfigurer webMvcConfigurer() {
+    public WebMvcConfigurer webMvcConfigurer(CorsEndpointProperties corsEndpointProperties) {
+        String[] allowedOrigins = corsEndpointProperties.getAllowedOrigins().toArray(String[]::new);
+        String[] allowedMethods = corsEndpointProperties.getAllowedMethods().toArray(String[]::new);
+        boolean allowCredentials = corsEndpointProperties.getAllowCredentials();
+        String[] allowedHeaders = corsEndpointProperties.getAllowedHeaders().toArray(String[]::new);
+
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")        // TODO: env driven
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowCredentials(true);
+                        .allowedOrigins(allowedOrigins)
+                        .allowedMethods(allowedMethods)
+                        .allowedHeaders(allowedHeaders)
+                        .allowCredentials(allowCredentials);
             }
         };
     }

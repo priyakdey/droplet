@@ -1,17 +1,23 @@
 package com.priyakdey.droplet.controller;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
+
+import com.priyakdey.droplet.cache.Cache;
+import com.priyakdey.droplet.exception.AuthException;
 import com.priyakdey.droplet.model.response.GoogleOAuthResponse;
-import com.priyakdey.droplet.security.SessionPayload;
 import com.priyakdey.droplet.security.StatePayload;
 import com.priyakdey.droplet.security.TokenProperties;
 import com.priyakdey.droplet.security.service.TokenService;
 import com.priyakdey.droplet.service.AuthService;
 import com.priyakdey.droplet.service.CookieService;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.*;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
 import java.net.URI;
-import java.time.Instant;
-import java.util.Map;
-import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
@@ -31,14 +34,8 @@ import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VAL
  */
 @RestController
 @RequestMapping(path = "/api/auth/google")
-public class GoogleLoginController implements LoginController {
-
-    private final TokenService<StatePayload> tokenService;
-    private final ClientRegistrationRepository clientRegistrationRepository;
-    private final AuthService<String> authService;
-    private final CookieService cookieService;
-    private final TokenProperties tokenProperties;
-    private final RestClient restClient;
+public class GoogleLoginController extends LoginController<String> {
+    private static final Logger logger = LoggerFactory.getLogger(GoogleLoginController.class);
 
     public GoogleLoginController(
             @Qualifier("googleOAuthStateTokenService") TokenService<StatePayload> stateTokenService,
@@ -46,98 +43,45 @@ public class GoogleLoginController implements LoginController {
             @Qualifier("googleAuthServiceImpl") AuthService<String> authService,
             CookieService cookieService,
             TokenProperties tokenProperties,
-            RestClient restClient) {
-        this.tokenService = stateTokenService;
-        this.clientRegistrationRepository = clientRegistrationRepository;
-        this.authService = authService;
-        this.cookieService = cookieService;
-        this.tokenProperties = tokenProperties;
-        this.restClient = restClient;
+            RestClient restClient,
+            Cache<String, StatePayload> stateCache,
+            @Value("${frontend.base-url}") String frontendBaseUrl) {
+        super(stateTokenService, clientRegistrationRepository, authService, cookieService,
+                tokenProperties, restClient, stateCache, frontendBaseUrl);
     }
 
     @Override
     @GetMapping("/login")
     public ResponseEntity<Void> redirectToProviderLogin() {
-        String nonce = UUID.randomUUID().toString();
-        String state = tokenService.generate(new StatePayload(nonce, Instant.now().toEpochMilli()));
-
-        ClientRegistration google = clientRegistrationRepository.findByRegistrationId("google");
-        String clientName = google.getClientName();
-        String clientId = google.getClientId();
-        String redirectUri = google.getRedirectUri();
-        String scope = String.join(" ", google.getScopes());
-        String authorizationUri = google.getProviderDetails().getAuthorizationUri();
-
-        Map<String, Object> params = Map.of(
-                "state", state,
-                "client_name", clientName,
-                "client_id", clientId,
-                "redirect_uri", redirectUri,
-                "response_type", "code",
-                "scope", scope,
-                "prompt", "select_account"
-        );
-
-        URI googleLoginUri = buildUri(authorizationUri, params);
-
-        return ResponseEntity.status(HttpStatus.FOUND).location(googleLoginUri).build();
+        URI googleLoginUri = buildLoginUriForProvider("google");
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(googleLoginUri)
+                .build();
     }
 
     @Override
     @GetMapping("/callback")
     public ResponseEntity<Void> handleCallback(@RequestParam("code") String code,
                                                @RequestParam("state") String state) {
-        try {
-            tokenService.decode(state);     // TODO: we need a way to verify the nonce sent.
-        } catch (JWTVerificationException e) {
-            throw new RuntimeException("JWT verification failed");  // TODO: custom exceptions
-        }
-
-        ClientRegistration google = clientRegistrationRepository.findByRegistrationId("google");
-        String clientName = google.getClientName();
-        String clientId = google.getClientId();
-        String clientSecret = google.getClientSecret();
-        String redirectUri = google.getRedirectUri();
-
-        String tokenUri = google.getProviderDetails().getTokenUri();
-
-        Map<String, Object> params = Map.of(
-                "client_name", clientName,
-                "client_id", clientId,
-                "client_secret", clientSecret,
-                "redirect_uri", redirectUri,
-                "code", code,
-                "grant_type", "authorization_code"
-        );
-
-        URI uri = buildUri(tokenUri, params);
+        validateState(state);
+        URI accessTokenUri = buildAccessTokenUriForProvider("google", code);
 
         ResponseEntity<GoogleOAuthResponse> response = restClient.post()
-                .uri(uri)
+                .uri(accessTokenUri)
                 .header(HttpHeaders.CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
-                .retrieve()     // TODO: handle error
+                .retrieve()
                 .toEntity(GoogleOAuthResponse.class);
 
         HttpStatusCode statusCode = response.getStatusCode();
         if (!statusCode.is2xxSuccessful() || !response.hasBody()) {
-            // TODO: custom exception
-            throw new RuntimeException("Failed to exchange code for token for google. Response code: " + statusCode);
+            logger.error("Could not get access_token from google. Error code: {} | Body: {}",
+                    statusCode, response.getBody());
+            throw new AuthException();
         }
 
         String idToken = response.getBody().getIdToken();
         ObjectId id = authService.login(idToken);
-
-        Instant iat = Instant.now();
-        TokenProperties.Token jwtProps = tokenProperties.getJwt();
-        Instant eat = iat.plusSeconds(jwtProps.expirationInSec());
-
-        SessionPayload payload = new SessionPayload(jwtProps.issuer(), iat, eat, id.toString(),
-                jwtProps.expirationInSec());
-        ResponseCookie cookie = cookieService.getCookie(payload);
-
-        URI homePage = URI.create("http://localhost:5173/home");        // TODO: env driven
-        return ResponseEntity.status(HttpStatus.FOUND).location(homePage)
-                .header(HttpHeaders.SET_COOKIE, cookie.getValue()).build();
+        return redirectToHomeWithCookie(id.toString());
     }
 
 }

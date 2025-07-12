@@ -5,7 +5,7 @@ import "./SocialAuthButton.css";
 interface SocialAuthButtonProps {
   logo: string;
   text: string;
-  onClick: (provider: string) => void;
+  onClick: () => void;
 }
 
 function SocialAuthButton({ logo, text, onClick }: SocialAuthButtonProps) {

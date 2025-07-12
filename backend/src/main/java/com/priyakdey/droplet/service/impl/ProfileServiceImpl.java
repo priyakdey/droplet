@@ -1,6 +1,7 @@
 package com.priyakdey.droplet.service.impl;
 
 import com.priyakdey.droplet.entity.Profile;
+import com.priyakdey.droplet.exception.ProfileNotFoundException;
 import com.priyakdey.droplet.model.dto.NewProfileDto;
 import com.priyakdey.droplet.repository.ProfileRepository;
 import com.priyakdey.droplet.service.ProfileService;
@@ -35,9 +36,12 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ObjectId getByProviderId(String providerId) {
-        // TODO: custom exception
-        Profile profile = profileRepository.findByProviderId(providerId)
-                .orElseThrow(RuntimeException::new);
-        return profile.getId();
+        return profileRepository
+                .findByProviderId(providerId)
+                .orElseThrow(() -> {
+                    logger.error("Profile not found by provider id {}", providerId);
+                    return new ProfileNotFoundException();
+                })
+                .getId();
     }
 }
