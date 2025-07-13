@@ -1,6 +1,7 @@
 package com.priyakdey.droplet.exception.handler;
 
 import com.priyakdey.droplet.exception.AuthException;
+import com.priyakdey.droplet.exception.InternalServerException;
 import com.priyakdey.droplet.exception.ProfileNotFoundException;
 import com.priyakdey.droplet.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -28,5 +29,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponse.setMessage("Could not authenticate user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
+
+    @ExceptionHandler(value = {InternalServerException.class, Exception.class})
+    public ResponseEntity<ErrorResponse> handleInternalServerException() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+
 
 }

@@ -18,7 +18,7 @@ spring:
             user-info-uri: https://api.github.com/user
         registration:
           google:
-            client-name: droplet-${spring.profiles.active}
+            client-name: ${spring.application.name}-${spring.profiles.active}
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
@@ -26,7 +26,7 @@ spring:
               - email
               - profile
           github:
-            client-name: droplet-${spring.profiles.active}
+            client-name: ${spring.application.name}-${spring.profiles.active}
             client-id: ${GITHUB_CLIENT_ID}
             client-secret: ${GITHUB_CLIENT_SECRET}
             scope:

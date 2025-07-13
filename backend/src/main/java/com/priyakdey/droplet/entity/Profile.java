@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
+
 /**
  * @author Priyak Dey
  */
@@ -26,8 +28,14 @@ public class Profile {
     @Field(name = "email")
     private String email;
 
+    @Field(name = "container")
+    private String container;
+
     @Field(name = "avatar_url")
     private String avatarUrl;
+
+    @Field(name = "expires_at")
+    private Instant expiresAt;
 
     public ObjectId getId() {
         return id;
@@ -35,6 +43,14 @@ public class Profile {
 
     public String getProvider() {
         return provider;
+    }
+
+    public String getContainer() {
+        return container;
+    }
+
+    public void setContainer(String container) {
+        this.container = container;
     }
 
     public void setProvider(String provider) {
@@ -75,5 +91,13 @@ public class Profile {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public Instant getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Instant expiresAt) {
+        this.expiresAt = expiresAt;
     }
 }

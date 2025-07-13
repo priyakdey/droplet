@@ -3,7 +3,7 @@
 - [X] Login with Google (OAuth)
 - [X] Login with GitHub
 - [ ] Login with Facebook
-- [ ] Secure cookie-based authentication (HttpOnly + SameSite=strict)
+- [X] Secure cookie-based authentication (HttpOnly + SameSite=strict)
 - [ ] Profile API (fetch user info post login)
 - [ ] Store & edit user preferences (Timezone, Display Name, Avatar)
 
@@ -34,4 +34,9 @@
 - [ ] Generate public share link
 - [ ] Share file with an email (public or restricted access)
 
+---
 
+### For later
+- [ ] Avatar fallback strategy
+- [ ] Retry + observability pattern for blob downloads
+- [ ] 

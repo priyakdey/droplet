@@ -14,7 +14,6 @@ public record NewProfileDto(String name, String email, String avatarUrl,
         profile.setProviderId(providerId);
         profile.setName(name);
         profile.setEmail(email);
-        profile.setAvatarUrl(avatarUrl);
         return profile;
     }
 
