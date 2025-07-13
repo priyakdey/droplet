@@ -1,4 +1,4 @@
-package com.priyakdey.droplet.security;
+package com.priyakdey.droplet.security.jwt;
 
 /**
  * @author Priyak Dey

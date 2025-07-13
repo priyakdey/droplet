@@ -1,6 +1,6 @@
 package com.priyakdey.droplet.configuration;
 
-import com.priyakdey.droplet.security.AppCorsProperties;
+import com.priyakdey.droplet.security.config.AppCorsProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

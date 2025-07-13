@@ -1,7 +1,4 @@
-package com.priyakdey.droplet.security.service;
-
-import com.priyakdey.droplet.security.TokenSigner;
-import com.priyakdey.droplet.security.TokenVerifier;
+package com.priyakdey.droplet.security.jwt;
 
 /**
  * @author Priyak Dey

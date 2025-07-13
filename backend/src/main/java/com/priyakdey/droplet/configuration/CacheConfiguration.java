@@ -2,7 +2,7 @@ package com.priyakdey.droplet.configuration;
 
 
 import com.priyakdey.droplet.cache.Cache;
-import com.priyakdey.droplet.security.StatePayload;
+import com.priyakdey.droplet.security.payload.StatePayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

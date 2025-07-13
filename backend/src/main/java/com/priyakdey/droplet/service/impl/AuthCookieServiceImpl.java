@@ -1,7 +1,7 @@
 package com.priyakdey.droplet.service.impl;
 
-import com.priyakdey.droplet.security.SessionPayload;
-import com.priyakdey.droplet.security.service.TokenService;
+import com.priyakdey.droplet.security.payload.SessionPayload;
+import com.priyakdey.droplet.security.jwt.TokenService;
 import com.priyakdey.droplet.service.CookieService;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;

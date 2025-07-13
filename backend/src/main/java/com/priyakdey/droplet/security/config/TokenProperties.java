@@ -1,4 +1,4 @@
-package com.priyakdey.droplet.security;
+package com.priyakdey.droplet.security.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

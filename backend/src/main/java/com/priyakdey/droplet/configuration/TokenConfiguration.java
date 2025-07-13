@@ -1,10 +1,15 @@
 package com.priyakdey.droplet.configuration;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.priyakdey.droplet.security.*;
-import com.priyakdey.droplet.security.service.Hmac256Signer;
-import com.priyakdey.droplet.security.service.Hmac256Verifier;
-import com.priyakdey.droplet.security.service.TokenService;
+import com.priyakdey.droplet.security.algorithm.Hmac256Signer;
+import com.priyakdey.droplet.security.algorithm.Hmac256Verifier;
+import com.priyakdey.droplet.security.jwt.TokenService;
+import com.priyakdey.droplet.security.config.AppCorsProperties;
+import com.priyakdey.droplet.security.config.TokenProperties;
+import com.priyakdey.droplet.security.jwt.TokenSigner;
+import com.priyakdey.droplet.security.jwt.TokenVerifier;
+import com.priyakdey.droplet.security.payload.SessionPayload;
+import com.priyakdey.droplet.security.payload.StatePayload;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,8 +1,5 @@
-package com.priyakdey.droplet.exception.handler;
+package com.priyakdey.droplet.exception;
 
-import com.priyakdey.droplet.exception.AuthException;
-import com.priyakdey.droplet.exception.InternalServerException;
-import com.priyakdey.droplet.exception.ProfileNotFoundException;
 import com.priyakdey.droplet.model.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

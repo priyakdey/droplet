@@ -1,6 +1,6 @@
 package com.priyakdey.droplet.service;
 
-import com.priyakdey.droplet.security.SessionPayload;
+import com.priyakdey.droplet.security.payload.SessionPayload;
 import org.springframework.http.ResponseCookie;
 
 /**

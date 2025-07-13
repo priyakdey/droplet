@@ -1,4 +1,4 @@
-package com.priyakdey.droplet.security;
+package com.priyakdey.droplet.security.payload;
 
 import java.time.Instant;
 

@@ -1,8 +1,8 @@
-package com.priyakdey.droplet.security.service;
+package com.priyakdey.droplet.security.algorithm;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.priyakdey.droplet.security.TokenSigner;
+import com.priyakdey.droplet.security.jwt.TokenSigner;
 
 import java.time.Instant;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.priyakdey.droplet.security;
+package com.priyakdey.droplet.security.util;
 
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;

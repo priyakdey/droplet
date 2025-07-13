@@ -1,10 +1,10 @@
-package com.priyakdey.droplet.security.service;
+package com.priyakdey.droplet.security.algorithm;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.priyakdey.droplet.security.TokenVerifier;
+import com.priyakdey.droplet.security.jwt.TokenVerifier;
 
 import java.util.function.Function;
 
