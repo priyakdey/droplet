@@ -10,7 +10,7 @@ import "./WelcomePage.css";
 
 function WelcomePage() {
 
-  function handleLogin(provider: string) {
+  async function handleLogin(provider: string) {
     window.location.href = `http://localhost:8080/api/auth/${provider}/login`;
   }
 

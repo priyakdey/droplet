@@ -4,6 +4,7 @@ import com.priyakdey.droplet.entity.Profile;
 import com.priyakdey.droplet.exception.InternalServerException;
 import com.priyakdey.droplet.exception.ProfileNotFoundException;
 import com.priyakdey.droplet.model.dto.NewProfileDto;
+import com.priyakdey.droplet.model.dto.ProfileDto;
 import com.priyakdey.droplet.repository.ProfileRepository;
 import com.priyakdey.droplet.service.BlobStorageService;
 import com.priyakdey.droplet.service.ProfileService;
@@ -21,6 +22,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Priyak Dey
@@ -112,6 +114,17 @@ public class ProfileServiceImpl implements ProfileService {
                     return new ProfileNotFoundException();
                 })
                 .getId();
+    }
+
+    @Override
+    public ProfileDto getByProfileId(String profileId) {
+        Optional<Profile> optional = profileRepository.findById(new ObjectId(profileId));
+        if (optional.isEmpty()) {
+            throw new ProfileNotFoundException();
+        }
+
+        Profile profile = optional.get();
+        return ProfileDto.from(profile);
     }
 
     private Instant extractExpiryFromCacheControl(String cacheControl) {

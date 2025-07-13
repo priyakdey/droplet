@@ -4,8 +4,8 @@
 - [X] Login with GitHub
 - [ ] Login with Facebook
 - [X] Secure cookie-based authentication (HttpOnly + SameSite=strict)
-- [ ] Profile API (fetch user info post login)
-- [ ] Store & edit user preferences (Timezone, Display Name, Avatar)
+- [X] Profile API (fetch user info post login)
+- [X] Store & edit user preferences (Timezone, Display Name, Avatar)
 
 ---
 

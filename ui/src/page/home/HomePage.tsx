@@ -1,23 +1,17 @@
-import { useEffect } from "react";
+import useProfileDetails from "@/hooks/useProfileDetails.ts";
+import { toast } from "sonner";
 
 function HomePage() {
-
-  useEffect(() => {
-    fetch("http://localhost:8080/me", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      credentials: "include"
-    })
-      .then(response => response.text())
-      .catch(error => console.log(error));
-  });
+  const { profileDetails } = useProfileDetails();
 
   return (
     <div>
-      Home Page
+      Hello, {profileDetails.name}
+      <div>
+        <img src={profileDetails.avatarUrl} alt="Profile picture of the user"
+             onError={() => toast.warning("Could not load profile picture")}
+        />
+      </div>
     </div>
   );
 }
